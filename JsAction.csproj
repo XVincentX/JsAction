@@ -40,6 +40,7 @@
     <Compile Include="JsActionAttribute.cs" />
     <Compile Include="JsActionHandler.cs" />
     <Compile Include="JsActionHelperExtension.cs" />
+    <Compile Include="JsActionRouteHandlerInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
