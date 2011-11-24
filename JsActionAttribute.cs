@@ -11,7 +11,7 @@ namespace JsAction
         }
 
         public string MethodName { get; set; }
-        public HttpSingleVerb? Verbs { get; set; }
+        public HttpSingleVerb Verb { get; set; }
     }
 
 }
