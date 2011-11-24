@@ -108,6 +108,7 @@ namespace JsAction
                    from t in a.GetTypes()
                    from m in t.GetMethods()
                    where m.IsDefined(typeof(TAttribute), inherit)
+                   && m.IsDefined(typeof(NonActionAttribute), inherit) == false
                    select m;
         }
         private RequestContext requestContext;
