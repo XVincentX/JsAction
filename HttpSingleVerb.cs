@@ -7,7 +7,8 @@ namespace JsAction
 {
     public enum HttpSingleVerb : short
     {
-        HttpGet = 0,
-        HttpPost = 1
+        None = 0,
+        HttpGet = 1,
+        HttpPost = 2
     }
 }

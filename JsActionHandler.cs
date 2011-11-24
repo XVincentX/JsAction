@@ -63,7 +63,7 @@ namespace JsAction
             string url = UrlHelper.GenerateUrl("Default", Action, Controller, null, RouteTable.Routes, this.requestContext, true);
 
 
-            string requestmethod = attribute.Verbs == null ? attributes.Count(attr => attr is HttpPostAttribute) != 0 ? POST : GET : attribute.Verbs.Value == HttpSingleVerb.HttpGet ? GET : POST;
+            string requestmethod = attribute.Verb == HttpSingleVerb.None ? attributes.Count(attr => attr is HttpPostAttribute) != 0 ? POST : GET : attribute.Verbs.Value == HttpSingleVerb.HttpGet ? GET : POST;
             StringBuilder jsondata = new StringBuilder();
 
             foreach (var parameter in method.GetParameters())
