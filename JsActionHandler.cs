@@ -10,6 +10,9 @@ using System.Diagnostics;
 
 namespace JsAction
 {
+    /// <summary>
+    /// Http and Route handler for javascript file generation
+    /// </summary>
     public class JsActionHandler : IHttpHandler, IRouteHandler
     {
         public bool IsReusable

@@ -8,6 +8,9 @@ namespace JsAction
 {
         public static class JsActionRouteHandlerInstance
         {
+            /// <summary>
+            /// Static singleton Route to add
+            /// </summary>
             public static readonly Route JsActionRoute = new Route("JsAction/", new JsAction.JsActionHandler());
         }
 }
