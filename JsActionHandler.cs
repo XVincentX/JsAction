@@ -48,7 +48,7 @@ namespace JsAction
 
         }
 
-        internal void GenerateMethodCall(StringBuilder js, MethodInfo method, JsActionAttribute attribute)
+        internal void GenerateMethodCall(StringBuilder js, MethodInfo method, JsActionAttribute jsattribute)
         {
 
             const string GET = "GET";
@@ -63,7 +63,58 @@ namespace JsAction
             string url = UrlHelper.GenerateUrl("Default", Action, Controller, null, RouteTable.Routes, this.requestContext, true);
 
 
-            string requestmethod = attribute.Verb == HttpSingleVerb.None ? attributes.Count(attr => attr is HttpPostAttribute) != 0 ? POST : GET : attribute.Verbs.Value == HttpSingleVerb.HttpGet ? GET : POST;
+            bool post = false;
+            bool get = false;
+
+            if (jsattribute.Verb != HttpSingleVerb.None)
+            {
+                if (jsattribute.Verb == HttpSingleVerb.HttpPost)
+                    post = true;
+                else
+                    get = true;
+            }
+            else
+            {
+                if (attributes.Count(attr => attr is AcceptVerbsAttribute) != 0)
+                {
+                    var verbattr = attributes.Where(attr => attr is AcceptVerbsAttribute).First();
+
+                    foreach (var verb in (verbattr as AcceptVerbsAttribute).Verbs)
+                    {
+                        if (verb.ToUpper() == GET)
+                            get = true;
+                        else if (verb.ToUpper() == POST)
+                            post = true;
+                    }
+
+                }
+                else
+                {
+                    post = attributes.Count(attr => attr is HttpPostAttribute) > 0;
+                    get = attributes.Count(attr => attr is HttpGetAttribute) > 0;
+
+                }
+            }
+
+            if (post && get || (!post && !get))
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine("JsAction -- I found two HttpVerb attributes, i will use GET as preferred");
+                    post = false;
+                    get = true;
+                }
+                else
+                    throw new Exception("There are two acceptable HttpVerbs but noone has been marked as preferred!");
+            }
+
+            string requestmethod = string.Empty;
+
+            if (post)
+                requestmethod = POST;
+            else if (get)
+                requestmethod = GET;
+
             StringBuilder jsondata = new StringBuilder();
 
             foreach (var parameter in method.GetParameters())
@@ -73,21 +124,6 @@ namespace JsAction
             if (jsondata.Length > 0)
                 jsondata.Remove(jsondata.Length - 1, 1);
 
-            var AcceptVerbs = attributes.Where(attr => attr is AcceptVerbsAttribute);
-            if (AcceptVerbs.Count() != 0)
-            {
-                var verbs = AcceptVerbs.First() as AcceptVerbsAttribute;
-                if (verbs.Verbs.Count() > 1)
-                {
-                    if (Debugger.IsAttached)
-                    {
-                        Debug.WriteLine("JsAction -- 2 accept verbs. I will suppose you prefer GET");
-                        requestmethod = GET;
-                    }
-                    else
-                        throw new Exception("2 accept verbs. Don't know which one to choose!");
-                }
-            }
             js.AppendFormat("{{var opts = {{url:\"{0}\",method: \"{1}\",data:{{{2}}}}};", url, requestmethod, jsondata);
             js.Append("$.extend(opts,options); return $.ajax(opts);}");
         }
