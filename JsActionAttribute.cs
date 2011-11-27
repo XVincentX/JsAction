@@ -11,6 +11,9 @@ namespace JsAction
     {
         public JsActionAttribute()
         {
+            Verb = HttpSingleVerb.None;
+            CacheRequest = true;
+            MethodName = null;
         }
 
         /// <summary>
@@ -21,6 +24,11 @@ namespace JsAction
         /// Gets or sets Http Verb to use in Ajax request. Must be specified if multiple Verbs are accepted for same Action Method.
         /// </summary>
         public HttpSingleVerb Verb { get; set; }
+
+        /// <summary>
+        /// Gets or sets if cache option parameter should be set.
+        /// </summary>
+        public bool CacheRequest { get; set; }
     }
 
 }

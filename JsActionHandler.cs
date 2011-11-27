@@ -126,7 +126,7 @@ namespace JsAction
             if (jsondata.Length > 0)
                 jsondata.Remove(jsondata.Length - 1, 1);
 
-            js.AppendFormat("{{var opts = {{url:\"{0}\",type: \"{1}\",data:{{{2}}}}};", url, requestmethod, jsondata);
+            js.AppendFormat("{{var opts = {{url:\"{0}\",cache:{3},type: \"{1}\",data:{{{2}}}}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false");
             js.Append("$.extend(opts,options); return $.ajax(opts);}");
         }
 
