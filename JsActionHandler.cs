@@ -24,7 +24,6 @@ namespace JsAction
         {
             var js = new StringBuilder();
             js.Append("var JsActions = {");
-
             var methods = this.GetMethodsWith<JsActionAttribute>(false);
             foreach (var method in methods)
             {
@@ -131,15 +130,11 @@ namespace JsAction
             js.Append("$.extend(opts,options); return $.ajax(opts);}");
         }
 
-
-
-
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             this.requestContext = requestContext;
             return this;
         }
-
 
         internal IEnumerable<MethodInfo> GetMethodsWith<TAttribute>(bool inherit) where TAttribute : System.Attribute
         {
