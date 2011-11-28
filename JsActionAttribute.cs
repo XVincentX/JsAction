@@ -13,6 +13,7 @@ namespace JsAction
         {
             Verb = HttpSingleVerb.None;
             CacheRequest = true;
+            Async = true;
             MethodName = null;
         }
 
@@ -29,6 +30,11 @@ namespace JsAction
         /// Gets or sets if cache option parameter should be set.
         /// </summary>
         public bool CacheRequest { get; set; }
+
+        /// <summary>
+        /// Gets or sets if request should be async or not.
+        /// </summary>
+        public bool Async { get; set; }
     }
 
 }
