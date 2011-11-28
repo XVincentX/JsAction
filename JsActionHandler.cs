@@ -24,17 +24,21 @@ namespace JsAction
         {
             var js = new StringBuilder();
             js.Append("var JsActions = {");
+
+            string[] groups = context.Request.QueryString["data"].Split(',');
+
             var methods = this.GetMethodsWith<JsActionAttribute>(false);
             foreach (var method in methods)
             {
-                var attribute = method.GetCustomAttributes(typeof(JsActionAttribute), false).First() as JsActionAttribute;
+                JsActionAttribute attribute = method.GetCustomAttributes(typeof(JsActionAttribute), false).First() as JsActionAttribute;
+
+                if (groups.Count(str => string.IsNullOrEmpty(str) == false) > 0 && attribute.Groups.Split(',').Intersect(groups).Count() == 0)
+                    continue;
 
                 js.AppendFormat("{0}:function(", string.IsNullOrEmpty(attribute.MethodName) ? method.Name : attribute.MethodName);
 
                 foreach (var parameter in method.GetParameters())
-                {
                     js.AppendFormat("{0},", parameter.Name);
-                }
 
                 js.Append("options)");
 

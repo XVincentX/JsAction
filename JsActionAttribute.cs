@@ -14,6 +14,7 @@ namespace JsAction
             Verb = HttpSingleVerb.None;
             CacheRequest = true;
             Async = true;
+            Groups = string.Empty;
             MethodName = null;
         }
 
@@ -25,6 +26,11 @@ namespace JsAction
         /// Gets or sets Http Verb to use in Ajax request. Must be specified if multiple Verbs are accepted for same Action Method.
         /// </summary>
         public HttpSingleVerb Verb { get; set; }
+
+        /// <summary>
+        /// Gets or sets group names for function, separated by comma values
+        /// </summary>
+        public string Groups { get; set; }
 
         /// <summary>
         /// Gets or sets if cache option parameter should be set.
