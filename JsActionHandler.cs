@@ -45,7 +45,7 @@ namespace JsAction
                 GenerateMethodCall(js, method, attribute);
             }
 
-            js.Append('}');
+            js.Remove(js.Length - 1, 1).Append('}');
 
             context.Response.ContentType = "application/javascript";
             context.Response.Charset = string.Empty;
@@ -131,7 +131,7 @@ namespace JsAction
                 jsondata.Remove(jsondata.Length - 1, 1);
 
             js.AppendFormat("{{var opts={{url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:{{{2}}}}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
-            js.Append("$.extend(opts,options);return $.ajax(opts);}");
+            js.Append("$.extend(opts,options);return $.ajax(opts);},");
         }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
