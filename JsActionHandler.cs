@@ -22,12 +22,17 @@ namespace JsAction
 
         public void ProcessRequest(HttpContext context)
         {
+
+            var methods = this.GetMethodsWith<JsActionAttribute>(false);
+
+            if (methods.Count() == 0)
+                return;
+
             var js = new StringBuilder();
             js.Append("var JsActions = {");
 
             string[] groups = context.Request.QueryString["data"].Split(',');
 
-            var methods = this.GetMethodsWith<JsActionAttribute>(false);
             foreach (var method in methods)
             {
                 JsActionAttribute attribute = method.GetCustomAttributes(typeof(JsActionAttribute), false).First() as JsActionAttribute;
