@@ -15,6 +15,7 @@ namespace JsAction
     /// </summary>
     public class JsActionHandler : IHttpHandler, IRouteHandler
     {
+
         public bool IsReusable
         {
             get { return true; }
@@ -23,14 +24,21 @@ namespace JsAction
         public void ProcessRequest(HttpContext context)
         {
 
-            var methods = this.GetMethodsWith<JsActionAttribute>(false);
+            var type = context.ApplicationInstance.GetType();
+            while (type != null && type.Namespace == "ASP")
+            {
+                type = type.BaseType;
+            }
+
+            var asm = type == null ? null : type.Assembly;
+
+            var methods = this.GetMethodsWith<JsActionAttribute>(false, asm);
 
             if (methods.Count() == 0)
                 return;
 
             var js = new StringBuilder();
             js.Append("var JsActions = {");
-
             string[] groups = context.Request.QueryString["data"].Split(',');
 
             foreach (var method in methods)
@@ -50,7 +58,22 @@ namespace JsAction
                 GenerateMethodCall(js, method, attribute);
             }
 
-            js.Remove(js.Length - 1, 1).Append('}');
+            js.Remove(js.Length - 1, 1).Append("};");
+
+            if (alerts.IsValueCreated)
+            {
+                alerts.Value.Remove(alerts.Value.Length - 1, 1);
+
+                js.Append("$(document).ready(function(){{$('body').prepend('<div style=\"background-color:#FF8080;border:1px solid black;margin:auto auto auto auto;\"><h2>JsAction debug message</h2><p>The following methods can handle multiple HttpVerbs, but no preference was choosen, and <a href=\"#\">GET</a> was assumed: <br/><table style=\"border-style:dotted;\"><tr><th>Method Name</th><th>Controller</th><th>Action</th></tr>");
+                foreach (var item in alerts.Value.ToString().Split(','))
+                {
+                    js.Append("<tr>");
+                    foreach (var it in item.Split('_'))
+                        js.AppendFormat("<td>{0}</td>", it);
+                    js.Append("</tr>");
+                }
+                js.Append("</table></p><p>Note: This message will output only in debug mode. JsAction will throw an <b>Exception</b> when debugger is not attached.</p></div>');}});");
+            }
 
             context.Response.ContentType = "application/javascript";
             context.Response.Charset = string.Empty;
@@ -112,6 +135,7 @@ namespace JsAction
                 if (Debugger.IsAttached)
                 {
                     Debug.WriteLine("JsAction -- I found two HttpVerb attributes, i will use GET as preferred");
+                    alerts.Value.AppendFormat("{2}_{1}_{0},", Action, Controller, jsattribute.MethodName != null ? jsattribute.MethodName : method.Name);
                     post = false;
                     get = true;
                 }
@@ -145,16 +169,18 @@ namespace JsAction
             return this;
         }
 
-        internal IEnumerable<MethodInfo> GetMethodsWith<TAttribute>(bool inherit) where TAttribute : System.Attribute
+        internal IEnumerable<MethodInfo> GetMethodsWith<TAttribute>(bool inherit, Assembly asm) where TAttribute : System.Attribute
         {
-            return from a in AppDomain.CurrentDomain.GetAssemblies()
-                   from t in a.GetTypes()
+            return
+                   from t in asm.GetTypes()
                    from m in t.GetMethods()
                    where m.IsDefined(typeof(TAttribute), inherit)
                    && m.IsDefined(typeof(NonActionAttribute), inherit) == false
                    select m;
         }
+
         private RequestContext requestContext;
+        private Lazy<StringBuilder> alerts = new Lazy<StringBuilder>(() => { return new StringBuilder(600); }, false);
 
     }
 }

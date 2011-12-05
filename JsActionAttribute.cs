@@ -9,6 +9,7 @@ namespace JsAction
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class JsActionAttribute : Attribute
     {
+
         public JsActionAttribute()
         {
             Verb = HttpSingleVerb.None;
