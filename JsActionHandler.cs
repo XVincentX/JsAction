@@ -23,10 +23,12 @@ namespace JsAction
         {
             this.SearchAsm = Asm;
         }
+
         public bool IsReusable
         {
             get { return true; }
         }
+
         public void ProcessRequest(HttpContext context)
         {
 
@@ -43,6 +45,8 @@ namespace JsAction
                 this.SearchAsm = new Assembly[1];
                 this.SearchAsm[0] = asm;
             }
+
+            this.urlhelper = new UrlHelper(this.requestContext, RouteTable.Routes);
 
             var methods = this.GetMethodsWith<JsActionAttribute>(false, SearchAsm);
 
@@ -107,15 +111,14 @@ namespace JsAction
 
             const string GET = "GET";
             const string POST = "POST";
-
+            
             var attributes = method.GetCustomAttributes(true);
             var ActionAttr = attributes.Where(attr => attr is ActionNameAttribute);
 
             string Action = (ActionAttr.Count() != 0) ? (ActionAttr.First() as ActionNameAttribute).Name : method.Name;
             string Controller = method.DeclaringType.Name.Substring(0, method.DeclaringType.Name.IndexOf("Controller"));
-
-
-            string url = UrlHelper.GenerateUrl("Default", Action, Controller, null, RouteTable.Routes, this.requestContext, true);
+            
+            string url = urlhelper.Action(Action, Controller, new { area = "" });
 
             bool post = false;
             bool get = false;
@@ -198,6 +201,7 @@ namespace JsAction
         private RequestContext requestContext;
         private Lazy<StringBuilder> alerts = new Lazy<StringBuilder>(() => { return new StringBuilder(600); }, false);
         private Assembly[] SearchAsm;
+        private UrlHelper urlhelper;
         #endregion
 
     }
