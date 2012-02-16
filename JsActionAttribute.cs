@@ -22,7 +22,18 @@ namespace JsAction
         /// <summary>
         /// Gets or sets Javascript function name to generate. If null, Action name will be used.
         /// </summary>
-        public string MethodName { get; set; }
+        public string MethodName
+        {
+            get;
+            set
+            {
+                if (JsVariableConventionMatching(value))
+                    throw new Exception("Function name does not respect standard variables name convention.");
+
+                MethodName = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets Http Verb to use in Ajax request. Must be specified if multiple Verbs are accepted for same Action Method.
         /// </summary>
@@ -42,6 +53,17 @@ namespace JsAction
         /// Gets or sets if request should be async or not.
         /// </summary>
         public bool Async { get; set; }
+
+        /// <summary>
+        /// Method to check compliance with standard JS variable convention
+        /// </summary>
+        /// <param name="value">Value to validate</param>
+        /// <returns>Bool value, if valid or not.</returns>
+        internal bool JsVariableConventionMatching(string value)
+        {
+            return (System.Text.RegularExpressions.Regex.IsMatch(value, @"^[$_\p{L}][$_\p{L}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u200C\u200D]*+$"))
+        }
+
     }
 
 }
