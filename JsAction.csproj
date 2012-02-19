@@ -35,14 +35,22 @@
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ext\DocsByReflection.cs" />
+    <Compile Include="ext\JsBeautify.cs" />
     <Compile Include="HttpSingleVerb.cs" />
     <Compile Include="JsActionAttribute.cs" />
     <Compile Include="JsActionHandler.cs" />
     <Compile Include="JsActionHelperExtension.cs" />
     <Compile Include="JsActionRouteHandlerInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PSScript\init.ps1" />
+    <None Include="PSScript\JsAction-GenDoc.psd1" />
+    <None Include="PSScript\JsAction-GenDoc.psm1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

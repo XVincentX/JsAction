@@ -16,7 +16,7 @@ namespace JsAction
             CacheRequest = true;
             Async = true;
             Groups = string.Empty;
-            MethodName = null;
+            this._methodname = null;
         }
 
         /// <summary>
@@ -24,13 +24,13 @@ namespace JsAction
         /// </summary>
         public string MethodName
         {
-            get;
+            get { return _methodname; }
             set
             {
-                if (JsVariableConventionMatching(value))
+                if (!JsVariableConventionMatching(value))
                     throw new Exception("Function name does not respect standard variables name convention.");
 
-                MethodName = value;
+                _methodname = value;
             }
         }
 
@@ -61,8 +61,15 @@ namespace JsAction
         /// <returns>Bool value, if valid or not.</returns>
         internal bool JsVariableConventionMatching(string value)
         {
-            return (System.Text.RegularExpressions.Regex.IsMatch(value, @"^[$_\p{L}][$_\p{L}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u200C\u200D]*+$"))
+            if (string.IsNullOrEmpty(value))
+                return true;
+            return (System.Text.RegularExpressions.Regex.IsMatch(value, @"^[\p{L}\p{Nl}$_][\p{L}\p{Nl}$\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*$"));
         }
+
+        /// <summary>
+        /// Internal method name string
+        /// </summary>
+        private string _methodname;
 
     }
 
