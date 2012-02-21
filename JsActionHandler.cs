@@ -24,18 +24,23 @@ namespace JsAction
         {
             this.SearchAsm = Asm;
         }
-
+        /// <summary>
+        /// Is the request reusable?
+        /// </summary>
         public bool IsReusable
         {
             get { return true; }
         }
-
+        /// <summary>
+        /// Processes the request
+        /// </summary>
+        /// <param name="context">context</param>
         public void ProcessRequest(HttpContext context)
         {
 
             string endJsCode = "";
-
-            if (context.Cache.Get("endJsCode") == null)
+            string cacheKey = string.Join("_", context.Request.QueryString["data"].Split(','));
+            if (context.Cache.Get(cacheKey) == null)
             {
                 if (this.SearchAsm.Count() == 0)
                 {
@@ -60,7 +65,7 @@ namespace JsAction
                 var js = new StringBuilder();
                 js.AppendFormat("/*Generated: {0}*/", DateTime.Now.ToString());
                 if (!documentate)
-                    js.Append("(function (a) { if (a.isFunction(String.prototype.format) === false) { String.prototype.format = function () { var a = this; var b = arguments.length; while (b--) { a = a.replace(new RegExp('\\\\{' + b + '\\\\}', 'gim'), arguments[b]) } return a } } if (a.isFunction(Date.prototype.toISOString) === false) { Date.prototype.toISOString = function () { var a = function (a, b) { a = a.toString(); for (var c = a.length; c < b; c++) { a = '0' + a } return a }; var b = this; return '{0}-{1}-{2}T{3}:{4}:{5}.{6}Z'.format(b.getUTCFullYear(), a(b.getUTCMonth() + 1, 2), a(b.getUTCDate(), 2), a(b.getUTCHours(), 2), a(b.getUTCMinutes(), 2), a(b.getUTCSeconds(), 2), a(b.getUTCMilliseconds(), 3)) } } var b = function (c, d, e, f) { if (a.isPlainObject(c)) { for (var g in c) { if (f === true || typeof c[g] !== 'undefined' && c[g] !== null) { b(c[g], d, e.length > 0 ? e + '.' + g : g, f) } } } else { if (a.isArray(c)) { a.each(c, function (a, c) { b(c, d, '{0}[{1}]'.format(e, a)) }); return } if (!a.isFunction(c)) { if (c instanceof Date) { d.push({ name: e, value: c.toISOString() }) } else { var h = typeof c; switch (h) { case 'boolean': case 'number': h = c; break; case 'object': if (f !== true) { return }; default: h = c || '' } d.push({ name: e, value: h }) } } } }; a.extend({ toDictionary: function (c, d, e) { c = a.isFunction(c) ? c.call() : c; if (arguments.length === 2 && typeof d === 'boolean') { e = d; d = '' } e = typeof e === 'boolean' ? e : false; var f = []; b(c, f, d || '', e); return f } }) })(jQuery);");
+                    js.Append(@"function trd(dt) {for (var pr in dt) {if (typeof (dt[pr]) == 'object') trd(dt[pr]); if (typeof (dt[pr]) == 'string' && dt[pr].indexOf('/Date') == 0) {var m = dt[pr].replace(/\/Date\((-?\d+)\)\//, '$1'); dt[pr] = new Date(parseInt(m));}}}").Append("(function (a) { if (a.isFunction(String.prototype.format) === false) { String.prototype.format = function () { var a = this; var b = arguments.length; while (b--) { a = a.replace(new RegExp('\\\\{' + b + '\\\\}', 'gim'), arguments[b]) } return a } } if (a.isFunction(Date.prototype.toISOString) === false) { Date.prototype.toISOString = function () { var a = function (a, b) { a = a.toString(); for (var c = a.length; c < b; c++) { a = '0' + a } return a }; var b = this; return '{0}-{1}-{2}T{3}:{4}:{5}.{6}Z'.format(b.getUTCFullYear(), a(b.getUTCMonth() + 1, 2), a(b.getUTCDate(), 2), a(b.getUTCHours(), 2), a(b.getUTCMinutes(), 2), a(b.getUTCSeconds(), 2), a(b.getUTCMilliseconds(), 3)) } } var b = function (c, d, e, f) { if (a.isPlainObject(c)) { for (var g in c) { if (f === true || typeof c[g] !== 'undefined' && c[g] !== null) { b(c[g], d, e.length > 0 ? e + '.' + g : g, f) } } } else { if (a.isArray(c)) { a.each(c, function (a, c) { b(c, d, '{0}[{1}]'.format(e, a)) }); return } if (!a.isFunction(c)) { if (c instanceof Date) { d.push({ name: e, value: c.toISOString() }) } else { var h = typeof c; switch (h) { case 'boolean': case 'number': h = c; break; case 'object': if (f !== true) { return }; default: h = c || '' } d.push({ name: e, value: h }) } } } }; a.extend({ toDictionary: function (c, d, e) { c = a.isFunction(c) ? c.call() : c; if (arguments.length === 2 && typeof d === 'boolean') { e = d; d = '' } e = typeof e === 'boolean' ? e : false; var f = []; b(c, f, d || '', e); return f } }) })(jQuery);");
 
                 js.Append("var JsActions = {");
                 string[] groups = context.Request.QueryString["data"].Split(',');
@@ -112,20 +117,13 @@ namespace JsAction
                 {
                     endJsCode = js.ToString();
 
-                    context.Cache.Insert("endJsCode", endJsCode);
+                    context.Cache.Insert(cacheKey, endJsCode);
                 }
             }
             else
             {
-                endJsCode = context.Cache.Get("endJsCode").ToString();
+                endJsCode = context.Cache.Get(cacheKey).ToString();
             }
-
-            TimeSpan refresh = new TimeSpan(365, 0, 0, 0, 0);
-            context.Response.Cache.SetExpires(DateTime.Today.Add(refresh));
-            context.Response.Cache.SetMaxAge(refresh);
-            context.Response.Cache.SetCacheability(HttpCacheability.Public);
-            context.Response.Cache.SetValidUntilExpires(true);
-            context.Response.Cache.SetETag(string.IsNullOrEmpty(context.Request.QueryString["data"]) ? "Not" : context.Request.QueryString["data"]);
 
             context.Response.ContentType = "application/javascript";
             context.Response.Charset = string.Empty;
@@ -182,7 +180,11 @@ namespace JsAction
                 return;
             }
         }
-
+        /// <summary>
+        /// Gets http handler to manage request
+        /// </summary>
+        /// <param name="requestContext">request context</param>
+        /// <returns>HttpHandler</returns>
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             this.requestContext = requestContext;
@@ -262,15 +264,19 @@ namespace JsAction
             {
                 jsondata.AppendFormat("{0}:{0},", parameter.Name);
             }
+
+
+
             if (jsondata.Length > 0)
                 jsondata.Remove(jsondata.Length - 1, 1);
 
             js.Append('{');
             if (documentate)
-            {
                 DocumentateTheFunction(js, method);
-            }
-            js.AppendFormat("var opts={{url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:$.toDictionary({{{2}}})}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
+
+
+
+            js.AppendFormat("var opts={{success:trd,url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:$.toDictionary({{{2}}})}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
             js.Append("jQuery.extend(opts,options);return jQuery.ajax(opts);},");
         }
 
