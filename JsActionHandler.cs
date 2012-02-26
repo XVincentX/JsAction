@@ -39,16 +39,16 @@ namespace JsAction
         {
 
             string endJsCode = "";
-            string cacheKey = string.Join("_", context.Request.QueryString["data"].Split(','));
+            string cacheKey = string.Join("_", context.Request.QueryString["data"].Split(',').OrderBy(w => w));
             if (context.Cache.Get(cacheKey) == null)
             {
                 if (this.SearchAsm.Count() == 0)
                 {
                     var type = context.ApplicationInstance.GetType();
+
                     while (type != null && type.Namespace == "ASP")
-                    {
                         type = type.BaseType;
-                    }
+
 
                     var asm = type == null ? null : type.Assembly;
                     this.SearchAsm = new Assembly[1];
@@ -57,35 +57,38 @@ namespace JsAction
 
                 this.urlhelper = new UrlHelper(this.requestContext, RouteTable.Routes);
                 var documentate = context.Request.QueryString["doc"] == "1";
-                var methods = this.GetMethodsWith<JsActionAttribute>(false, SearchAsm);
+                var groupedMethods = this.GetMethodsWith<JsActionAttribute>(SearchAsm);
 
-                if (methods.Count() == 0)
+                if (groupedMethods.Count() == 0)
                     return;
 
                 var js = new StringBuilder();
-                js.AppendFormat("/*Generated: {0}*/", DateTime.Now.ToString());
                 if (!documentate)
                     js.Append(@"function trd(a){for(var b in a){if(typeof a[b]=='object')trd(a[b]);if(typeof a[b]=='string'&&a[b].indexOf('/Date')==0){var c=a[b].replace(/\/Date\((-?\d+)\)\//,'$1');a[b]=new Date(parseInt(c))}}}").Append("(function (a) { if (a.isFunction(String.prototype.format) === false) { String.prototype.format = function () { var a = this; var b = arguments.length; while (b--) { a = a.replace(new RegExp('\\\\{' + b + '\\\\}', 'gim'), arguments[b]) } return a } } if (a.isFunction(Date.prototype.toISOString) === false) { Date.prototype.toISOString = function () { var a = function (a, b) { a = a.toString(); for (var c = a.length; c < b; c++) { a = '0' + a } return a }; var b = this; return '{0}-{1}-{2}T{3}:{4}:{5}.{6}Z'.format(b.getUTCFullYear(), a(b.getUTCMonth() + 1, 2), a(b.getUTCDate(), 2), a(b.getUTCHours(), 2), a(b.getUTCMinutes(), 2), a(b.getUTCSeconds(), 2), a(b.getUTCMilliseconds(), 3)) } } var b = function (c, d, e, f) { if (a.isPlainObject(c)) { for (var g in c) { if (f === true || typeof c[g] !== 'undefined' && c[g] !== null) { b(c[g], d, e.length > 0 ? e + '.' + g : g, f) } } } else { if (a.isArray(c)) { a.each(c, function (a, c) { b(c, d, '{0}[{1}]'.format(e, a)) }); return } if (!a.isFunction(c)) { if (c instanceof Date) { d.push({ name: e, value: c.toISOString() }) } else { var h = typeof c; switch (h) { case 'boolean': case 'number': h = c; break; case 'object': if (f !== true) { return }; default: h = c || '' } d.push({ name: e, value: h }) } } } }; a.extend({ toDictionary: function (c, d, e) { c = a.isFunction(c) ? c.call() : c; if (arguments.length === 2 && typeof d === 'boolean') { e = d; d = '' } e = typeof e === 'boolean' ? e : false; var f = []; b(c, f, d || '', e); return f } }) })(jQuery);");
 
                 js.Append("var JsActions={");
                 string[] groups = context.Request.QueryString["data"].Split(',');
 
-                foreach (var method in methods)
+                foreach (var controller in groupedMethods)
                 {
-                    JsActionAttribute attribute = method.GetCustomAttributes(typeof(JsActionAttribute), false).First() as JsActionAttribute;
+                    string ControllerName = controller.Key.Name.Substring(0, controller.Key.Name.IndexOf("Controller"));
+                    js.AppendFormat("{0}:{{", ControllerName);
+                    foreach (var method in controller)
+                    {
+                        JsActionAttribute attribute = method.GetCustomAttributes(typeof(JsActionAttribute), false).First() as JsActionAttribute;
 
-                    if (groups.Count(str => string.IsNullOrEmpty(str) == false) > 0 && attribute.Groups.Split(',').Intersect(groups).Count() == 0)
-                        continue;
+                        if (groups.Count(str => string.IsNullOrEmpty(str) == false) > 0 && attribute.Groups.Split(',').Intersect(groups).Count() == 0)
+                            continue;
 
+                        var parameters = string.Join(",", method.GetParameters().Select(m => m.Name));
+                        if (parameters.Length > 0)
+                            parameters += ',';
+                        js.AppendFormat("{0}:function({1}options)", string.IsNullOrEmpty(attribute.MethodName) ? method.Name : attribute.MethodName, parameters);
 
-                    js.AppendFormat("{0}:function(", string.IsNullOrEmpty(attribute.MethodName) ? method.Name : attribute.MethodName);
+                        GenerateMethodCall(js, method, ControllerName, attribute, documentate);
+                    }
 
-                    foreach (var parameter in method.GetParameters())
-                        js.AppendFormat("{0},", parameter.Name);
-
-                    js.Append("options)");
-
-                    GenerateMethodCall(js, method, attribute, documentate);
+                    js.Remove(js.Length - 1, 1).Append("},");
                 }
 
                 js.Remove(js.Length - 1, 1).Append("};");
@@ -94,7 +97,7 @@ namespace JsAction
                 {
                     alerts.Value.Remove(alerts.Value.Length - 1, 1);
 
-                    js.Append("jQuery(document).ready(function(){{jQuery('body').prepend('<div style=\"background-color:#FF8080;border:1px solid black;margin:auto auto auto auto;\"><h2>JsAction debug message</h2><p>The following methods can handle multiple HttpVerbs, but no preference was choosen, and <a href=\"#\">GET</a> was assumed: <br/><table style=\"border-style:dotted;\"><tr><th>Method Name</th><th>Controller</th><th>Action</th></tr>");
+                    js.Append("jQuery(document).ready(function(){{jQuery('body').prepend('<div style=\"background-color:#FF8080;border:1px solid black;margin:auto auto auto auto;\"><h2>JsAction debug message</h2><p>The following groupedMethods can handle multiple HttpVerbs, but no preference was choosen, and <a href=\"#\">GET</a> was assumed: <br/><table style=\"border-style:dotted;\"><tr><th>Method Name</th><th>Controller</th><th>Action</th></tr>");
                     foreach (var item in alerts.Value.ToString().Split(','))
                     {
                         js.Append("<tr>");
@@ -131,7 +134,10 @@ namespace JsAction
             context.Response.End();
 
         }
-
+        /// <summary>
+        /// Stub. Complex type decomposition for better intellisense
+        /// </summary>
+        /// <param name="js">js stringBuilder</param>
         internal void ComplexTypeDecomposition(StringBuilder js)
         {
             //Works, but not used.
@@ -151,9 +157,15 @@ namespace JsAction
                 sb.Append('}');
             }
         }
-
+        /// <summary>
+        /// Generates documentation for current method
+        /// </summary>
+        /// <param name="js">js Stringbuilder</param>
+        /// <param name="method">Method to analyze</param>
         internal void DocumentateTheFunction(StringBuilder js, MethodInfo method)
         {
+
+            const string ajaxOptionParam = "<param name=\"options\" type=\"ajaxSettings\">[OPTIONAL] AjaxOptions partial object; it will be mergend with the one sent to .ajax jQuery function</param>";
             try
             {
                 var doc = ext.DocsByReflection.XMLFromMember(method);
@@ -166,19 +178,37 @@ namespace JsAction
                         var thetype = method.GetParameters().Where(w => w.Name == node.Attributes.GetNamedItem("name").Value).First().ParameterType;
                         //                       if (!thetype.IsPrimitive)
                         //                           this.ComplexTypeList.Value.Add(thetype);
+                        
+                        if (thetype.Name.Contains("`1"))
+                        {
+                            var GenericType = thetype.GetGenericArguments()[0].Name;
+                            typenode.InnerText = string.Concat(thetype.Name.Substring(0, thetype.Name.Length - 2), string.Format("<{0}>", GenericType));
+                        }
 
-                        typenode.InnerText = thetype.Name;
                         node.Attributes.Append(typenode);
                     }
                 }
-                var strdoc = string.Concat(@"///", string.Concat(doc.InnerXml, "<param name=\"options\" type=\"ajaxSettings\">[OPTIONAL] AjaxOptions partial object; it will be mergend with the one sent to .ajax jQuery function</param>").Replace(Environment.NewLine, string.Concat(Environment.NewLine, "///")), Environment.NewLine);
+                var strdoc = string.Concat(@"///", string.Concat(doc.InnerXml, ajaxOptionParam).Replace(Environment.NewLine, string.Concat(Environment.NewLine, "///")), Environment.NewLine);
                 js.Append(strdoc);
             }
-            catch (JsAction.ext.DocsByReflectionException c)
+            catch (JsAction.ext.DocsByReflectionException)
             {
-                js.AppendLine(string.Concat("//WARNING - JsAction:", c.Message, ": ", method.Name, ",", method.DeclaringType.Assembly.ToString(), ",", method.DeclaringType));
-                return;
+                //There is no documentation. We will create it on the fly.
+                foreach (var parameter in method.GetParameters())
+                {
+                    string paramType = parameter.ParameterType.Name;
+                    if (paramType.Contains("`1"))
+                    {
+                        var GenericType = parameter.ParameterType.GetGenericArguments()[0].Name;
+                        paramType = string.Concat(paramType.Substring(0, paramType.Length - 2), string.Format("<{0}>", GenericType));
+                    }
+
+                    js.AppendFormat("///<param name=\"{0}\" type = \"{1}\"></param>{2}", parameter.Name, paramType, Environment.NewLine);
+
+                }
+                js.AppendLine("///" + ajaxOptionParam);
             }
+
         }
         /// <summary>
         /// Gets http handler to manage request
@@ -190,8 +220,7 @@ namespace JsAction
             this.requestContext = requestContext;
             return this;
         }
-
-        internal void GenerateMethodCall(StringBuilder js, MethodInfo method, JsActionAttribute jsattribute, bool documentate)
+        internal void GenerateMethodCall(StringBuilder js, MethodInfo method, string Controller, JsActionAttribute jsattribute, bool documentate)
         {
 
             const string GET = "GET";
@@ -201,7 +230,6 @@ namespace JsAction
             var ActionAttr = attributes.Where(attr => attr is ActionNameAttribute);
 
             string Action = (ActionAttr.Count() != 0) ? (ActionAttr.First() as ActionNameAttribute).Name : method.Name;
-            string Controller = method.DeclaringType.Name.Substring(0, method.DeclaringType.Name.IndexOf("Controller"));
 
             string url = urlhelper.Action(Action, Controller);
 
@@ -265,8 +293,6 @@ namespace JsAction
                 jsondata.AppendFormat("{0}:{0},", parameter.Name);
             }
 
-
-
             if (jsondata.Length > 0)
                 jsondata.Remove(jsondata.Length - 1, 1);
 
@@ -274,21 +300,21 @@ namespace JsAction
             if (documentate)
                 DocumentateTheFunction(js, method);
 
-
-
             js.AppendFormat("var opts={{success:trd,url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:$.toDictionary({{{2}}})}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
             js.Append("jQuery.extend(opts,options);return jQuery.ajax(opts);},");
         }
-
-        internal IEnumerable<MethodInfo> GetMethodsWith<TAttribute>(bool inherit, params Assembly[] asm) where TAttribute : System.Attribute
+        internal IEnumerable<IGrouping<Type, MethodInfo>> GetMethodsWith<TAttribute>(params Assembly[] asm) where TAttribute : System.Attribute
         {
-            return
+            var methods =
                    from ass in asm
                    from t in ass.GetTypes()
                    from m in t.GetMethods()
-                   where m.IsDefined(typeof(TAttribute), inherit)
-                   && m.IsDefined(typeof(NonActionAttribute), inherit) == false
+                   where m.IsDefined(typeof(TAttribute), false)
+                   && m.IsDefined(typeof(NonActionAttribute), false) == false
                    select m;
+
+            return methods.GroupBy(m => m.DeclaringType);
+
         }
 
         #region Private Members

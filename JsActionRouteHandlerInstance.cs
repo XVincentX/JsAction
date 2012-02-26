@@ -7,6 +7,9 @@ using System.Web.Mvc;
 
 namespace JsAction
 {
+    /// <summary>
+    /// Static class with singleton instance
+    /// </summary>
     public static class JsActionRouteHandlerInstance
     {
         /// <summary>
