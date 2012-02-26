@@ -40,7 +40,8 @@ namespace JsAction
 
             string endJsCode = "";
             string cacheKey = string.Join("_", context.Request.QueryString["data"].Split(',').OrderBy(w => w));
-            if (context.Cache.Get(cacheKey) == null)
+            var documentate = !string.IsNullOrEmpty(context.Request.QueryString["doc"]);
+            if (context.Cache.Get(cacheKey) == null || documentate == true)
             {
                 if (this.SearchAsm.Count() == 0)
                 {
@@ -56,7 +57,6 @@ namespace JsAction
                 }
 
                 this.urlhelper = new UrlHelper(this.requestContext, RouteTable.Routes);
-                var documentate = context.Request.QueryString["doc"] == "1";
                 var groupedMethods = this.GetMethodsWith<JsActionAttribute>(SearchAsm);
 
                 if (groupedMethods.Count() == 0)
@@ -178,11 +178,11 @@ namespace JsAction
                         var thetype = method.GetParameters().Where(w => w.Name == node.Attributes.GetNamedItem("name").Value).First().ParameterType;
                         //                       if (!thetype.IsPrimitive)
                         //                           this.ComplexTypeList.Value.Add(thetype);
-                        
+
                         if (thetype.Name.Contains("`1"))
                         {
                             var GenericType = thetype.GetGenericArguments()[0].Name;
-                            typenode.InnerText = string.Concat(thetype.Name.Substring(0, thetype.Name.Length - 2), string.Format("<{0}>", GenericType));
+                            typenode.InnerText = string.Concat(GenericType, thetype.Name.Substring(0, thetype.Name.Length - 2));
                         }
 
                         node.Attributes.Append(typenode);
@@ -200,7 +200,7 @@ namespace JsAction
                     if (paramType.Contains("`1"))
                     {
                         var GenericType = parameter.ParameterType.GetGenericArguments()[0].Name;
-                        paramType = string.Concat(paramType.Substring(0, paramType.Length - 2), string.Format("<{0}>", GenericType));
+                        paramType = string.Concat(GenericType, paramType.Substring(0, paramType.Length - 2));
                     }
 
                     js.AppendFormat("///<param name=\"{0}\" type = \"{1}\"></param>{2}", parameter.Name, paramType, Environment.NewLine);
