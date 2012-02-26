@@ -154,7 +154,7 @@ namespace JsAction.ext
             catch (Exception exception)
             {
                 failCache[assembly] = exception;
-                throw exception;
+                throw;
             }
         }
 

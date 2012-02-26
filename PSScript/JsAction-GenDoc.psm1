@@ -4,8 +4,8 @@
 	{
 		$project = Get-Project
 		Build-Project($project)
-		$url = Ge-Url($project)
-		$url+= "JsAction?doc=1&data="
+		$url = Get-Url($project)
+		$url+= "/JsAction?doc=1&data="
 		echo 'Will listen at '
 		echo $url
 		$DTE.ExecuteCommand("Debug.Start")
