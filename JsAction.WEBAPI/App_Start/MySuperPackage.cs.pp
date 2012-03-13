@@ -6,7 +6,7 @@
 namespace $rootnamespace$.App_Start {
     public static class MySuperPackage {
         public static void PreStart() {
-            System.Web.Routing.RouteTable.Add("JsActionWebApiRoute", JsAction.JsActionWebApiRouteHandlerInstance.JsActionWebApiRoute);
+            System.Web.Routing.RouteTable.Routes.Add("JsActionWebApiRoute", JsAction.JsActionWebApiRouteHandlerInstance.JsActionWebApiRoute);
         }
     }
 }
