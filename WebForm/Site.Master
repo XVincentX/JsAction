@@ -6,7 +6,8 @@
     <title></title>
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
     <script src='<%=Page.ResolveClientUrl("~/Scripts/jquery-1.7.1.min.js")%>' type="text/javascript"></script>
-    <script type="text/javascript" src='<%= Page.ResolveClientUrl("~/JsActionWebApi?data=") %>'></script>
+    <%= JsActionHelper.WebApiScript() %>
+    
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>
