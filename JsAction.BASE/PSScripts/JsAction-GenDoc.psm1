@@ -11,10 +11,26 @@
 		$DTE.ExecuteCommand("Debug.Start")
 		Start-Sleep -s 5
 		$httpclient = New-Object 'System.Net.WebClient'
-		$js = $httpclient.DownloadString($url)
+		$js = ""
+		try
+		{
+			$js = $httpclient.DownloadString($url)
+		}
+		catch [Exception]
+		{
+			echo 'Ok, no MVC project.'
+		}
 		$url = Get-Url($project)
 		$url+= "/JsActionWebApi?doc=1&data="
-		$jsapi = $httpclient.DownloadString($url)
+		try
+		{
+			$jsapi = $httpclient.DownloadString($url)
+		}
+		catch [Exception]
+		{
+			echo 'Ok, no WebApi project.'
+		}
+
 		$DTE.ExecuteCommand("Debug.StopDebugging")
 		$path =	[System.Io.Path]::Combine([System.Io.Path]::GetTempPath(),"JsActions.vsdoc.js")
 		$js = [System.String]::Combine($js,[System.Environment]::NewLine)

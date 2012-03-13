@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForm", "WebForm\WebForm.
 		{17F54E7C-2788-45C7-A2D4-82F9D819D4AB} = {17F54E7C-2788-45C7-A2D4-82F9D819D4AB}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPackageProject", "TestPackageProject\TestPackageProject.csproj", "{C9E06FB7-6D72-4A13-9131-2B7EAAEBFD6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{012249FC-666B-4A73-9AED-6C4D58EFAA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012249FC-666B-4A73-9AED-6C4D58EFAA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012249FC-666B-4A73-9AED-6C4D58EFAA32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E06FB7-6D72-4A13-9131-2B7EAAEBFD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9E06FB7-6D72-4A13-9131-2B7EAAEBFD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9E06FB7-6D72-4A13-9131-2B7EAAEBFD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9E06FB7-6D72-4A13-9131-2B7EAAEBFD6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
