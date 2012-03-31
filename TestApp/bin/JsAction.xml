@@ -4,16 +4,28 @@
         <name>JsAction</name>
     </assembly>
     <members>
-        <member name="T:System.Web.Mvc.JsActionHelperExtension">
+        <member name="T:JsAction.JsActionHelperExtension">
             <summary>
             JsAction Helper extension
             </summary>
         </member>
-        <member name="M:System.Web.Mvc.JsActionHelperExtension.JsScript(System.Web.Mvc.HtmlHelper,System.String[])">
+        <member name="M:JsAction.JsActionHelperExtension.JsScript(System.Web.Mvc.HtmlHelper,System.String[])">
             <summary>
             Writes into view the needed script reference for JsAction.
             </summary>
             <param name="helper">static html helper</param>
+            <param name="Groups">Groups name to import</param>
+            <returns>Html String that represents script reference</returns>
+        </member>
+        <member name="T:System.Web.Mvc.JsActionHelperExtension">
+            <summary>
+            JsAction Helper
+            </summary>
+        </member>
+        <member name="M:System.Web.Mvc.JsActionHelperExtension.JsActionScript(System.Web.Mvc.HtmlHelper,System.String[])">
+            <summary>
+            Writes into view the needed script reference for JsAction.
+            </summary>
             <param name="Groups">Groups name to import</param>
             <returns>Html String that represents script reference</returns>
         </member>

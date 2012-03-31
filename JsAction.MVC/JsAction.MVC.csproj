@@ -46,7 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Start\MySuperPackage.cs.pp" />
+    <None Include="App_Start\RegJsAction.cs.pp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JsAction.BASE\JsAction.BASE.csproj">
@@ -55,6 +55,10 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(SolutionDir)
+NuGet.exe Pack JsAction.nuspec</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

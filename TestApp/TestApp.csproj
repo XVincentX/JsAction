@@ -99,6 +99,7 @@
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\JsActions.vsdoc.js" />
     <Content Include="Scripts\qunit.js" />
     <Content Include="Scripts\script.js" />
     <None Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />

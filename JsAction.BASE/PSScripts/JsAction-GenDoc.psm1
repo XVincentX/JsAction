@@ -33,8 +33,8 @@
 
 		$DTE.ExecuteCommand("Debug.StopDebugging")
 		$path =	[System.Io.Path]::Combine([System.Io.Path]::GetTempPath(),"JsActions.vsdoc.js")
-		$js = [System.String]::Combine($js,[System.Environment]::NewLine)
-		$js = [System.String]::Combine($js,$jsapi)
+		$js = [System.String]::Concat($js,[System.Environment]::NewLine)
+		$js = [System.String]::Concat($js,$jsapi)
 		[System.IO.File]::WriteAllText($path,$js)
 		try
 		{
