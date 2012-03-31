@@ -17,7 +17,7 @@ namespace JsAction
         public static void DocumentateTheFunction(StringBuilder js, MethodInfo method)
         {
 
-            const string ajaxOptionParam = "<param name=\"options\" type=\"ajaxSettings\">[OPTIONAL] AjaxOptions partial object; it will be mergend with the one sent to .ajax jQuery function</param>";
+            const string ajaxOptionParam = "<param name=\"options\" type=\"ajaxSettings\">[OPTIONAL] AjaxOptions partial object; it will be mergend with the one sent to .ajax jQuery function</param><returns type=\"jqXHR\"/>";
             try
             {
                 var doc = ext.DocsByReflection.XMLFromMember(method);
@@ -28,8 +28,6 @@ namespace JsAction
                     {
                         var typenode = node.OwnerDocument.CreateAttribute("type");
                         var thetype = method.GetParameters().Where(w => w.Name == node.Attributes.GetNamedItem("name").Value).First().ParameterType;
-                        //                       if (!thetype.IsPrimitive)
-                        //                           this.ComplexTypeList.Value.Add(thetype);
 
                         if (thetype.Name.Contains("`1"))
                         {
@@ -68,23 +66,26 @@ namespace JsAction
         /// </summary>
         /// <param name="js">js stringBuilder</param>
         /// <param name="ComplexTypeList">Complex list to scan</param>
-        public static void ComplexTypeDecomposition(StringBuilder js, Lazy<List<Type>> ComplexTypeList)
+        public static void ComplexTypeDecomposition(StringBuilder js, Lazy<List<Type>> ComplexTypeList, bool documentate)
         {
-            //Works, but not used.
             if (ComplexTypeList.IsValueCreated == false)
                 return;
 
-            StringBuilder sb = new StringBuilder(30 * ComplexTypeList.Value.Count);
-
-            foreach (var ctype in ComplexTypeList.Value)
+            foreach (var ctype in ComplexTypeList.Value.Distinct())
             {
-                var props = ctype.GetProperties().Select(p => p.Name);
-                sb.AppendFormat("{0} = function({1}){{", ctype.Name, string.Join(",", props));
+
+                StringBuilder tmp = new StringBuilder();
+
+                var props = ctype.GetProperties();
+                js.AppendFormat("if (typeof {0} == 'undefined') {{function {0}({1}){{", ctype.Name, string.Join(",", props.Select(p => p.Name)));
+
                 foreach (var prop in props)
                 {
-                    sb.AppendFormat("this.{0}={0};", prop);
+                    if (documentate)
+                        js.AppendFormat("///<param name=\"{0}\" type = \"{1}\"></param>{2}", prop.Name, prop.PropertyType, Environment.NewLine);
+                    tmp.AppendFormat("this.{0}={0};", prop.Name);
                 }
-                sb.Append('}');
+                js.Append(tmp).Append("}}");
             }
         }
     }

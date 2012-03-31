@@ -7,6 +7,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Collections;
 
 namespace JsAction
 {
@@ -26,9 +27,20 @@ namespace JsAction
             if (groups.Count(str => string.IsNullOrEmpty(str) == false) > 0 && jsattribute.Groups.Split(',').Intersect(groups).Count() == 0)
                 return;
 
-            var parameters = string.Join(",", method.GetParameters().Select(m => m.Name));
+            var pars = method.GetParameters();
+
+            var parameters = string.Join(",", pars.Select(m => m.Name));
             if (parameters.Length > 0)
                 parameters += ',';
+
+            pars.FirstOrDefault(m =>
+            {
+                if (m.ParameterType.IsGenericType)
+                    ComplexTypeList.Value.Add(m.ParameterType.GetGenericArguments().First());
+                else if (m.ParameterType != typeof(string) && m.ParameterType.IsPrimitive == false)
+                    ComplexTypeList.Value.Add(m.ParameterType);
+                return false;
+            });
 
             string methodName = method.Name;
 
@@ -142,9 +154,5 @@ namespace JsAction
         {
             get { return string.Empty; }
         }
-        #region Private Members
-        //private Lazy<List<Type>> ComplexTypeList = new Lazy<List<Type>>(() => { return new List<Type>(4); }, false);
-        #endregion
-
     }
 }

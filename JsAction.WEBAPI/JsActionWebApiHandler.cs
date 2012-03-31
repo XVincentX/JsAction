@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
 using System.Web.Http.WebHost.Routing;
+using System.Collections;
 
 
 namespace JsAction
@@ -22,10 +23,21 @@ namespace JsAction
             if (groups.Count(str => string.IsNullOrEmpty(str) == false) > 0 && jsattribute.Groups.Split(',').Intersect(groups).Count() == 0)
                 return;
 
-            var parameters = string.Join(",", method.GetParameters().Select(m => m.Name));
+            var pars = method.GetParameters();
+
+            var parameters = string.Join(",", pars.Select(m => m.Name));
             if (parameters.Length > 0)
                 parameters += ',';
             js.AppendFormat("{0}:function({1}options)", method.Name, parameters);
+
+            pars.FirstOrDefault(m =>
+            {
+                if (m.ParameterType.IsGenericType)
+                    ComplexTypeList.Value.Add(m.ParameterType.GetGenericArguments().First());
+                else if (m.ParameterType != typeof(string) && m.ParameterType != typeof(DateTime) && m.ParameterType != typeof(DateTimeOffset) && m.ParameterType.IsPrimitive == false)
+                    ComplexTypeList.Value.Add(m.ParameterType);
+                return false;
+            });
 
             js.Append('{');
             if (documentate)
@@ -34,7 +46,7 @@ namespace JsAction
                 JsActionUtils.DocumentateTheFunction(js, method);
                 js.Append("},");
                 return;
-                
+
             }
 
             string url = RouteTable.Routes.Where(q => q is HttpWebRoute).First().GetVirtualPath(this.requestContext, new RouteValueDictionary(new { httproute = "", controller = Controller })).VirtualPath;
@@ -67,7 +79,7 @@ namespace JsAction
 
         protected override IEnumerable<IGrouping<Type, System.Reflection.MethodInfo>> GetMethodsWith<TAttribute>(params System.Reflection.Assembly[] asm)
         {
-            
+
             var methods =
            from ass in asm
            from t in ass.GetTypes()
