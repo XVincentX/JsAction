@@ -122,7 +122,7 @@ namespace JsAction
 
             StringBuilder jsondata = new StringBuilder();
 
-            foreach (var parameter in method.GetParameters())
+            foreach (var parameter in pars)
             {
                 jsondata.AppendFormat("{0}:{0},", parameter.Name);
             }
@@ -148,11 +148,24 @@ namespace JsAction
         }
         protected override string cacheKey
         {
-            get { return string.Join("_", this.qstring.Split(',').OrderBy(w => w)); }
+            get
+            {
+                var qsplit = this.qstring.Split(',');
+                if (qsplit.Count() > 0)
+                    return string.Concat("_MVC_", string.Join("_", this.qstring.Split(',').OrderBy(w => w)));
+                return "_MVC_";
+            }
         }
         protected override string InnerObject
         {
             get { return string.Empty; }
+        }
+        protected override bool InjectHelperScript
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }
