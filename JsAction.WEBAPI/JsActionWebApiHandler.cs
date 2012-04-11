@@ -48,12 +48,11 @@ namespace JsAction
                 return;
 
             }
-
-            string url = RouteTable.Routes.Where(q => q is HttpWebRoute).First().GetVirtualPath(this.requestContext, new RouteValueDictionary(new { httproute = "", controller = Controller })).VirtualPath;
+            string url = RouteTable.Routes.GetVirtualPath(this.requestContext, new RouteValueDictionary(new { httproute = "", controller = Controller })).VirtualPath;
 
             StringBuilder jsondata = new StringBuilder();
 
-            foreach (var parameter in method.GetParameters())
+            foreach (var parameter in pars)
             {
                 jsondata.AppendFormat("{0}:{0},", parameter.Name);
             }
@@ -95,12 +94,26 @@ namespace JsAction
 
         protected override string cacheKey
         {
-            get { return string.Concat("_API_", string.Join("_", this.qstring.Split(',').OrderBy(w => w))); }
+            get
+            {
+                var qsplit = this.qstring.Split(',');
+                if (qsplit.Count() > 0)
+                    return string.Concat("_API_", string.Join("_", this.qstring.Split(',').OrderBy(w => w)));
+                return "_API_";
+            }
         }
 
         protected override string InnerObject
         {
             get { return ".WebApi"; }
+        }
+
+        protected override bool InjectHelperScript
+        {
+            get
+            {
+                return true;
+            }
         }
 
     }
