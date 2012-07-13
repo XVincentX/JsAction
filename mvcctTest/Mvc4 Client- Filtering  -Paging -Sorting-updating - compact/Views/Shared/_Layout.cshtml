@@ -1,0 +1,64 @@
+﻿@using MVCControlsToolkit.Controls.Validation;
+@using MVCControlsToolkit.Controls;
+<!DOCTYPE html>
+<html>
+<head>    
+   
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/jquery-ui-1.8.9.custom.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/"+ThemedControlsStrings.GetTheme()+"/Style.css")" rel="stylesheet" type="text/css" />
+    
+    <script type='text/javascript' src="@Url.Content("~/Scripts/jquery-1.6.1.min.js")"></script>
+    
+    <script type='text/javascript' src="@Url.Content("~/Scripts/jquery-ui-1.8.9.custom.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/jquery.validate-1.8.1.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/globalize.min.js")"></script>
+    @Html.GlobalizationScript()
+    @Html.JQueryDatePickerGlobalizationScript()
+    <script type='text/javascript' src="@Url.Content("~/Scripts/MVCControlToolkit.Controls.Core-2.2.0.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/MVCControlToolkit.Controls.Datetime-2.2.0.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/knockout.all-2.2.0.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/MVCControlToolkit.JsQueryable-2.2.0.min.js")"></script>
+    <script type='text/javascript' src="@Url.Content("~/Scripts/WebApiRetrieve.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/JsActionQueryable/")"></script>
+    
+
+    
+    <meta http-equiv="PRAGMA" content="NO-CACHE"/>
+</head>
+
+<body>
+    <div class="page">
+
+        <div id="header">
+            <div id="title">
+                <h1>MVC Controls Toolkit Examples</h1>
+            </div>
+              
+            <div id="logindisplay" style="height:10px">
+                
+            </div> 
+            
+            <div id="menucontainer">
+            
+                <ul id="menu">              
+                    <li>@Html.ActionLink("Display Grid", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Edit Grid", "IndexEdit", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                </ul>
+            
+            </div>
+        </div>
+
+        <div id="main">
+            @RenderBody()
+
+            <div id="footer">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

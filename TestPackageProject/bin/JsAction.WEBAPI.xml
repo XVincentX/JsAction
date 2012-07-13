@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JsAction.WEBAPI</name>
+    </assembly>
+    <members>
+        <member name="T:System.Web.JsActionHelper">
+            <summary>
+            Static helper class for JsAction WebApi
+            </summary>
+        </member>
+        <member name="M:System.Web.JsActionHelper.WebApiScript(System.String[])">
+            <summary>
+            Creates script refence for JsAction WEBAPI
+            </summary>
+            <param name="Groups">Optional groups</param>
+            <returns></returns>
+        </member>
+        <member name="T:JsAction.JsActionWebApiRouteHandlerInstance">
+            <summary>
+            Container static class
+            </summary>
+        </member>
+        <member name="F:JsAction.JsActionWebApiRouteHandlerInstance.JsActionWebApiRoute">
+            <summary>
+            Predefined JsAction WebApi route
+            </summary>
+        </member>
+    </members>
+</doc>

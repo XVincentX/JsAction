@@ -1,0 +1,357 @@
+﻿
+@using MVCControlsToolkit.Core;
+@using MVCControlsToolkit.Controls;
+
+@{
+    var options = ViewData["ThemeParams"] as GridDescription;
+
+    Func<dynamic, HelperResult> editTemplate = null;
+    if ((options.Features & GridFeatures.Edit) == GridFeatures.Edit)
+    {
+        editTemplate = EditItem;
+    }
+    Func<dynamic, HelperResult> displayTemplate = DisplayItem;
+    Func<dynamic, HelperResult> insertTemplate = null;
+    if ((options.Features & GridFeatures.Insert) == GridFeatures.Insert)
+    {
+        insertTemplate = InsertItem;
+    }
+}
+@helper InsertItem(dynamic htmlHelper)
+    {
+        var options = htmlHelper.ViewData["ThemeParams"] as GridDescription;
+    int count = 0;
+    bool hasCustomField = false;
+    foreach (Column column in options.Fields)
+    {
+        if ((column.Features & FieldFeatures.Hidden) != FieldFeatures.Hidden)
+        {
+            count++;
+        }
+        else if (column.DispalyTemplate != null)
+        {
+            hasCustomField = true;
+        }
+    }
+    if ((options.Features & GridFeatures.Edit) == GridFeatures.Edit 
+        || hasCustomField
+        || (options.Features & GridFeatures.Delete) == GridFeatures.Delete) { count++; }
+    <td colspan='@count' class="Theme-DataGrid-Column">
+        @DataGridHelpers.ImgDataButton(
+            htmlHelper, DataButtonType.Insert, 
+            Url.Content("~/Content/themes/test/images/add.jpg"), null)</td>
+}
+@helper DisplayItem(dynamic htmlHelper)
+    {
+        var options = htmlHelper.ViewData["ThemeParams"] as GridDescription;
+        bool hasCustomField=false;
+        foreach (Column column in options.Fields)
+        {
+            if ((column.Features & FieldFeatures.Hidden) != FieldFeatures.Hidden)
+            {
+            <td class="Theme-DataGrid-Column">
+            @{
+                if (column.DispalyTemplate == null)
+                {
+                      @CoreHTMLHelpers.DisplayField(htmlHelper, column.Field)
+                }
+                else
+                {
+                      @CoreHTMLHelpers.TemplateFor(htmlHelper, column.DispalyTemplate)
+                }
+             }
+            </td>
+            }
+            else if(column.DispalyTemplate != null){
+                hasCustomField = true;
+            }
+        }
+        if ((options.Features & GridFeatures.Edit) == GridFeatures.Edit 
+            || hasCustomField
+            || (options.Features & GridFeatures.Delete) == GridFeatures.Delete)
+        {
+        <td>
+            <table>
+                <tr> 
+                    @if ((options.Features & GridFeatures.Edit) == GridFeatures.Edit)
+                    {         
+                        <td>
+                            @DataGridHelpers.ImgDataButton(
+                                htmlHelper, DataButtonType.Edit, 
+                                Url.Content("~/Content/themes/test/images/edit.jpg"), null)
+                        </td>
+                    }
+                    @if ((options.Features & GridFeatures.Delete) == GridFeatures.Delete)
+                    {
+                        <td>
+                            @DataGridHelpers.ImgDataButton(
+                                htmlHelper, DataButtonType.Delete, 
+                                Url.Content("~/Content/themes/test/images/delete.jpg"), null)
+                        </td>
+                    }
+                    @if (hasCustomField)
+                    {
+                        foreach (Column column in options.Fields)
+                        {
+                            if ((column.Features & FieldFeatures.Hidden) == FieldFeatures.Hidden &&
+                                column.DispalyTemplate != null)
+                            {
+                                <td>
+                                    @CoreHTMLHelpers.TemplateFor(htmlHelper, column.DispalyTemplate)
+                                </td>
+                            }
+                        }
+                    }
+               </tr>
+            </table>
+        </td>
+        }
+    
+
+}
+
+@helper EditItem(dynamic htmlHelper)
+    {
+        var options = htmlHelper.ViewData["ThemeParams"] as GridDescription;
+
+        foreach (Column column in options.Fields)
+        {
+            if ((column.Features & FieldFeatures.Hidden) != FieldFeatures.Hidden)
+            {
+            <td class="Theme-DataGrid-Column">
+            @{
+                if (column.EditTemplate == null)
+                {
+                      @EditorExtensions.EditorFor(htmlHelper, column.Field)
+                }
+                else
+                {
+                    if (column.EditTemplate is string)
+                    {
+                        string templateName = column.EditTemplate as string;
+                        templateName = "Themes/Test/" + templateName;
+                        @CoreHTMLHelpers.TemplateFor(htmlHelper, templateName)
+                    }
+                    else
+                    {     
+                        @CoreHTMLHelpers.TemplateFor(htmlHelper, column.EditTemplate)
+                    }
+                }
+             }
+            </td>
+            }
+        }
+        <td>
+            <table>
+                <tr>          
+                    <td>
+                        @DataGridHelpers.ImgDataButton(
+                            htmlHelper, 
+                            DataButtonType.Cancel, 
+                            Url.Content("~/Content/themes/test/images/undo.jpg"), null)
+                    </td>
+                    @if ((options.Features & GridFeatures.UndoEdit) == GridFeatures.UndoEdit)
+                    {
+                        <td>
+                            @DataGridHelpers.LinkDataButton(
+                                htmlHelper, 
+                                DataButtonType.ResetRow, 
+                                ThemedControlsStrings.Get("Item_ResetRow", "DataGrid"), null)
+                        </td>
+                    }
+                    @foreach (Column column in options.Fields)
+                    {
+                        if ((column.Features & FieldFeatures.Hidden) == FieldFeatures.Hidden)
+                        {
+                            if (column.EditTemplate != null)
+                            {
+                                @CoreHTMLHelpers.TemplateFor(htmlHelper, column.EditTemplate)
+                            }
+                            else
+                            {
+                                <td style="width:0px">
+                                    @InputExtensions.HiddenFor(htmlHelper, column.Field)
+                                </td>
+                            }
+                        }
+                    }
+               </tr>
+            </table>
+        </td>
+}
+
+@helper DisplayHeader(dynamic htmlHelper, GridDescription options)
+    {
+    <tr>
+        @{bool hasCustomField=false;}
+        @foreach (Column column in options.Fields)
+        {
+            if ((column.Features & FieldFeatures.Hidden) != FieldFeatures.Hidden)
+            {
+            <td class="Theme-DataGrid-Header">
+                <table>
+                <tr>
+                @if ((options.Features & GridFeatures.Filtering) == GridFeatures.Filtering && (column.Features & FieldFeatures.Filtering) == FieldFeatures.Filtering)
+                {
+                    <td >
+                    <div class="Theme-DataGrid-Filter">
+                        <div class="MvcControlsToolkit-Hover">
+                            @{
+                            var h1 = DataFilterClauseHelpers.DataFilterClauseFor(
+                                htmlHelper,
+                                options.Filter,
+                                column.Field,
+                                "first");
+                            var h2 = DataFilterClauseHelpers.DataFilterClauseFor(
+                                htmlHelper,
+                                options.Filter,
+                                column.Field,
+                                "second");
+                            bool oldClientSetting = ViewContext.ClientValidationEnabled;
+                            ViewContext.ClientValidationEnabled = false;
+                                }
+                              <table>
+                                <tr>
+                                    <td>
+                                        @InputExtensions.CheckBox(h1, "Selected", h1.ViewData.Model.Selected)
+                                    </td>
+                                    <td>
+                                        @DataFilterClauseHelpers.FilterClauseSelect(h1, h1.ViewData.Model.Condition, column.Field)
+                                    </td>   
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        @{object val1=h1.ViewData.Model.Search;
+                                          if (! h1.ViewData.Model.Selected)
+                                          {
+                                              val1 = string.Empty;
+                                          } 
+                                        }
+                                        @InputExtensions.TextBox(h1, "Search", val1)
+                                        @{ValidationExtensions.Validate(h1, "Search"); }
+                                    </td>
+                                </tr>
+                              </table>
+                              <table>
+                                <tr>
+                                    <td>
+                                        @InputExtensions.CheckBox(h2, "Selected", h2.ViewData.Model.Selected)
+                                    </td>
+                                    <td>
+                                        @DataFilterClauseHelpers.FilterClauseSelect(h2, h2.ViewData.Model.Condition, column.Field)
+                                    </td>   
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> 
+                                        @{object val2=h2.ViewData.Model.Search;
+                                          if (!h2.ViewData.Model.Selected)
+                                          {
+                                              val2 = string.Empty;
+                                          } 
+                                         }
+                                        @InputExtensions.TextBox(h2, "Search", val2)
+                                        @{ValidationExtensions.Validate(h2, "Search"); }
+                                        @{ViewContext.ClientValidationEnabled=oldClientSetting;}
+                                    </td>
+                                </tr>
+                              </table>    
+                            </div>
+                        </div>
+                    </td>
+                    
+                }
+                <td>
+                <strong>
+                @if ((column.Features & FieldFeatures.Sort) == FieldFeatures.Sort)
+                {
+                    @DataGridHelpers.SortButtonForTrackedCollection(
+                        htmlHelper, 
+                        options.ToShow, 
+                        column.Field, 
+                        sortButtonStyle: SortButtonStyle.Button)
+                }
+                else
+                {
+                    if (column.ColumnHeader != null)
+                    {
+                        @column.ColumnHeader
+                    }
+                    else
+                    {
+                       @DataGridHelpers.ColumnNameForTrackedCollection(
+                       htmlHelper, 
+                       options.ToShow, 
+                       column.Field) 
+                    }
+                }
+            </strong>
+            </td></tr>
+            </table>
+            </td>
+            }
+            else if (column.DispalyTemplate != null)
+            {
+                hasCustomField = true;
+            }
+            
+        }
+        @if ((options.Features & GridFeatures.Edit) == GridFeatures.Edit 
+            || hasCustomField
+            || (options.Features & GridFeatures.Delete) == GridFeatures.Delete)
+        {
+            <td class="Theme-DataGrid-Header"></td>
+        }
+    </tr>
+}
+
+<table>
+@DisplayHeader(options.HtmlHelper, options)
+@DataGridHelpers.DataGridFor(options.HtmlHelper,
+    options.ToShow,
+    ItemContainerType.tr,
+    editTemplate,
+    displayTemplate,
+    null,
+    insertTemplate,
+    enableMultipleInsert: (options.Features & GridFeatures.InsertOne) != GridFeatures.InsertOne,
+    itemCss: "Theme-DataGrid-ItemCss",
+    altItemCss: "Theme-DataGrid-AlternateItemCss",
+    toTrack: options.GetToTrack())
+</table>
+@if ((options.Features & GridFeatures.Paging) == GridFeatures.Paging)
+{
+    <div class="Theme-DataGrid-Pager">
+        @{ var pager = PagerHelper.PagerFor(options.HtmlHelper, options.Page, options.PrevPage, options.PageCount);}
+        @pager.PageButton(ThemedControlsStrings.Get("Page_First", "DataGrid"), PageButtonType.First, PageButtonStyle.Link)
+        @pager.PageButton(ThemedControlsStrings.Get("Page_Prev", "DataGrid"), PageButtonType.Previous, PageButtonStyle.Link)
+        @pager.PageChoice(5)
+        @pager.PageButton(ThemedControlsStrings.Get("Page_Next", "DataGrid"), PageButtonType.Next, PageButtonStyle.Link)
+        @pager.PageButton(ThemedControlsStrings.Get("Page_Last", "DataGrid"), PageButtonType.Last, PageButtonStyle.Link)
+        @pager.PageButton(ThemedControlsStrings.Get("Page_GoTo", "DataGrid"), PageButtonType.GoTo, PageButtonStyle.Button)
+        @pager.GoToText(new { @class = "Theme-Pager-GoToText" })
+    </div>
+}
+
+@if (((options.Features & GridFeatures.Sorting) == GridFeatures.Sorting) && options.ToOrder != null)
+{
+        @DataGridHelpers.EnableSortingFor(
+            options.HtmlHelper, options.ToShow,
+            options.ToOrder, "Theme-DataGrid-NormalHeader",
+            "Theme-DataGrid-AscendingHeader", "Theme-DataGrid-DescendingHeader",
+            causePostback: (options.Features & GridFeatures.SortingCausesPost) == GridFeatures.SortingCausesPost,
+            page: options.Page)
+}
+else if (((options.Features & GridFeatures.SortingOne) == GridFeatures.SortingOne) && options.ToOrder != null) 
+{
+    @DataGridHelpers.EnableSortingFor(
+            options.HtmlHelper, options.ToShow,
+            options.ToOrder, "Theme-DataGrid-NormalHeader",
+            "Theme-DataGrid-AscendingHeader", "Theme-DataGrid-DescendingHeader",
+            causePostback: (options.Features & GridFeatures.SortingCausesPost) == GridFeatures.SortingCausesPost,
+            oneColumnSorting: true,
+            page: options.Page)
+}
+    
+
+
+

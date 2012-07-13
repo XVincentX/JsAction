@@ -1,0 +1,109 @@
+﻿@model Mvc_Examples.Models.ToDoViewModel
+@using MVCControlsToolkit.Core;
+@using MVCControlsToolkit.Controls;
+@using Mvc_Examples.Controls;
+@using Mvc_Examples.Models;
+
+
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>My ToDo List</h2>
+@{Html.EnableClientValidation();}
+
+@using (Html.BeginForm("Index", "Home"))
+{
+    <div>     
+        @Html.DataGridFor(m => m.ToDoList, ItemContainerType.tr, "ToDoEditItem", "ToDoDisplayItem", "ToDoGrid", "ToDoInsertItem")
+    </div>
+    
+     <div >
+     @{var filter = Html.DataFilterBuilder(m => m.ToDoFilter, new ToDoGeneralFilter());}
+     <table>
+         <tr>
+             <td align="left" valign="top" style="width:300px">
+              @filter.LabelFor(m => m.Name)
+              @filter.CheckBoxFor(m => m.NameEnabled,
+                new Dictionary<string, object>() { { "class", "NameGroup_checkbox" } })
+              
+              @filter.TypedTextBoxFor(m => m.Name, 
+                new Dictionary<string, object> (){{"class", "NameGroup"}}, 
+                watermarkCss: "watermark")
+                @filter.ViewsOnOff("NameGroup", false)
+             </td>
+             <td align="left" valign="top" >
+                @filter.LabelFor(m => m.FromDate)
+                @filter.CheckBoxFor(m => m.FromDateEnabled,
+                    new Dictionary<string, object>() { { "class", "FromGroup_checkbox" } })
+                
+                
+             </td>
+             <td align="left" valign="top" style="width:300px">
+                 <div class ="FromGroup" >
+                        @filter.DateTimeFor(m => m.FromDate, 
+                            DateTime.Now.AddMonths(-6),
+                            true).DateCalendar(
+                                new CalendarOptions{
+                                       ChangeYear = true,
+                                       ChangeMonth =true
+                                })
+                 </div>     
+                 @filter.ViewsOnOff("FromGroup", false) 
+             </td>
+             <td align="left" valign="top" >
+                 @filter.LabelFor(m => m.ToDate)
+                 @filter.CheckBoxFor(m => m.ToDateEnabled,
+                    new Dictionary<string, object>() { { "class", "ToGroup_checkbox" } })
+                 
+                 
+             </td>
+             <td align="left" valign="top" style="width:300px">
+                <div class ="ToGroup" >
+                         @filter.DateTimeFor(m => m.ToDate,
+                                DateTime.Now.AddMonths(6),
+                                true).DateCalendar(
+                                    new CalendarOptions{
+                                           ChangeYear = true,
+                                           ChangeMonth =true
+                                    })
+                    
+                 </div>  
+                 @filter.ViewsOnOff("ToGroup", false)
+             </td>
+         </tr>
+     </table>
+     
+    </div>
+    
+    
+    <div class="ToDoPager">
+        @{ var pager = Html.PagerFor(m => m.CurrPage, m => m.PrevPage, m => m.TotalPages);}
+        @pager.PageButton("<<", PageButtonType.First, PageButtonStyle.Link)
+        @pager.PageButton("<", PageButtonType.Previous, PageButtonStyle.Link)
+        @pager.PageChoice(5)
+        @pager.PageButton(">", PageButtonType.Next, PageButtonStyle.Link)
+        @pager.PageButton(">>", PageButtonType.Last, PageButtonStyle.Link)
+    </div>
+    
+    <div>
+        <input type="submit" value="Save" />
+        @Html.ManipulationButton(ManipulationButtonType.ResetGrid, "Reset", m => m.ToDoList, null, ManipulationButtonStyle.Button)
+        @Html.EnableSortingFor(m => m.ToDoList, m => m.ToDoOrder, "NormalHeaderToDo", "AscendingHeaderToDo", "DescendingHeaderToDo", page: m => m.CurrPage)
+        @Html.HiddenFor(m => m.TotalPages)
+    </div>
+}
+
+@{ Html.DetailFormFor(Ajax, m => m.ToDoList, ExternalContainerType.div,
+           "ToDoSubTasks", "Home", null, "isChangedToDo", "isDeletedToDo", detailDialog:
+           new MVCControlsToolkit.Controls.DataGrid.Dialog
+           {
+               Title = "prova dialogo",
+               Show = "slide",
+               Hide = "slide",
+               MinWidth=800
+
+           });
+  }
+

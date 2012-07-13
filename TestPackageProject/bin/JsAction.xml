@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JsAction</name>
+    </assembly>
+    <members>
+        <member name="T:JsAction.JsActionHelperExtension">
+            <summary>
+            JsAction Helper extension
+            </summary>
+        </member>
+        <member name="M:JsAction.JsActionHelperExtension.JsScript(System.Web.Mvc.HtmlHelper,System.String[])">
+            <summary>
+            Writes into view the needed script reference for JsAction.
+            </summary>
+            <param name="helper">static html helper</param>
+            <param name="Groups">Groups name to import</param>
+            <returns>Html String that represents script reference</returns>
+        </member>
+        <member name="T:System.Web.Mvc.JsActionHelperExtension">
+            <summary>
+            JsAction Helper
+            </summary>
+        </member>
+        <member name="M:System.Web.Mvc.JsActionHelperExtension.JsActionScript(System.Web.Mvc.HtmlHelper,System.String[])">
+            <summary>
+            Writes into view the needed script reference for JsAction.
+            </summary>
+            <param name="Groups">Groups name to import</param>
+            <returns>Html String that represents script reference</returns>
+        </member>
+        <member name="T:JsAction.JsActionHandler">
+            <summary>
+            Http and Route handler for javascript file generation
+            </summary>
+        </member>
+        <member name="T:JsAction.JsActionRouteHandlerInstance">
+            <summary>
+            Static class with singleton instance
+            </summary>
+        </member>
+        <member name="F:JsAction.JsActionRouteHandlerInstance.JsActionRoute">
+            <summary>
+            Static singleton Route to add
+            </summary>
+        </member>
+    </members>
+</doc>
