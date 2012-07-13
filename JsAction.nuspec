@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.5</version>
+    <authors>Vincenzo Chianese</authors>
+    <owners>Vincenzo Chianese</owners>
+    <licenseUrl>http://jsaction.codeplex.com/license</licenseUrl>
+    <projectUrl>http://jsaction.codeplex.com</projectUrl>
+    <iconUrl>http://download.codeplex.com/Download?ProjectName=jsaction&amp;DownloadId=306778&amp;Build=18301</iconUrl>
+    <dependencies>
+      <dependency id="jQuery" version="1.7.1" />
+      <dependency id="WebActivator" version="1.5" />
+    </dependencies>
+    <id>JsAction</id>
+    <title>JsAction</title>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>JsAction is a simple and lightweight RouteHandler for ASP.NET MVC and WEBAPI that will generate automatic jQuery based Javascript and provide a direct way to call MVC and WEBAPI Action Methods using a single data annotation.
+You will no longer have to write custom ajax calls to retrieve data, but just use this library.</description>
+    <summary>JsAction is a simple and lightweight RouteHandler for ASP.NET MVC and WEBAPI that will generate automatic jQuery based Javascript and provide a direct way to call MVC and WEBAPI Action Methods using a data annotation</summary>
+    <releaseNotes>This version introduces a breaking change. Be sure to visit the Project Page and check the changelog!</releaseNotes>
+    <copyright>Vincenzo Chianese</copyright>
+    <language>en-US</language>
+    <tags>jQuery MVC WEBAPI Routehandler</tags>
+  </metadata>
+  <files>
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.MVC\App_Start\RegJsAction.cs.pp" target="content\App_Start\RegJsAction.cs.pp" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.MVC\bin\Release\JsAction.BASE.dll" target="lib\net40\JsAction.BASE.dll" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.MVC\bin\Release\JsAction.dll" target="lib\net40\JsAction.dll" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.MVC\bin\Release\JsAction.XML" target="lib\net40\JsAction.XML" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\init.ps1" target="tools\init.ps1" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\JsAction-GenDoc.psd1" target="tools\JsAction-GenDoc.psd1" />
+    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\JsAction-GenDoc.psm1" target="tools\JsAction-GenDoc.psm1" />
+  </files>
+</package>

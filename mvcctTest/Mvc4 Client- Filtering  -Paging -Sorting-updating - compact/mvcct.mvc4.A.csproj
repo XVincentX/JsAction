@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19927023-387C-46D0-A8DD-B66C2C9F1645}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mvc_Examples</RootNamespace>
+    <AssemblyName>Mvc Examples</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MVC4ControlsToolkit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b6277d1c804403e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\binaries\MVC 4 Binaries\MVC4ControlsToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\binaries\dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ToDoController.cs" />
+    <Compile Include="Controls\ToDoGeneralFilter.cs" />
+    <Compile Include="Controls\ToDoItemByNameFilter.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MeetingsModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MeetingsModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SubTasks.cs" />
+    <Compile Include="Models\SubTasksView.cs" />
+    <Compile Include="Models\ToDo.cs" />
+    <Compile Include="Models\ToDoPage.cs" />
+    <Compile Include="Models\ToDoView.cs" />
+    <Compile Include="Models\ToDoViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\SiteDb.sdf" />
+    <Content Include="Content\add.jpg" />
+    <Content Include="Content\ascending.gif" />
+    <Content Include="Content\delete.jpg" />
+    <Content Include="Content\descending.gif" />
+    <Content Include="Content\edit.jpg" />
+    <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\images\file.gif" />
+    <Content Include="Content\images\folder-closed.gif" />
+    <Content Include="Content\images\folder.gif" />
+    <Content Include="Content\images\minus.gif" />
+    <Content Include="Content\images\plus.gif" />
+    <Content Include="Content\images\treeview-black-line.gif" />
+    <Content Include="Content\images\treeview-black.gif" />
+    <Content Include="Content\images\treeview-default-line.gif" />
+    <Content Include="Content\images\treeview-default.gif" />
+    <Content Include="Content\images\treeview-famfamfam-line.gif" />
+    <Content Include="Content\images\treeview-famfamfam.gif" />
+    <Content Include="Content\images\treeview-gray-line.gif" />
+    <Content Include="Content\images\treeview-gray.gif" />
+    <Content Include="Content\images\treeview-red-line.gif" />
+    <Content Include="Content\images\treeview-red.gif" />
+    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Content\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Content\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Content\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\jquery-ui-1.8.9.custom.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\undo.jpg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\EditDisplayToDo.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\globalize.min.js" />
+    <Content Include="Scripts\jquery-1.6.1.js" />
+    <Content Include="Scripts\jquery-1.6.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.9.custom.min.js" />
+    <Content Include="Scripts\jquery.global.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate-1.8.1.js" />
+    <Content Include="Scripts\jquery.validate-1.8.1.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout.all-2.2.0.min.js" />
+    <Content Include="Scripts\MvcControlToolkit.Bindings-2.2.0.js" />
+    <Content Include="Scripts\MVCControlToolkit.Controls.Core-2.2.0.js" />
+    <Content Include="Scripts\MVCControlToolkit.Controls.Core-2.2.0.min.js" />
+    <Content Include="Scripts\MVCControlToolkit.Controls.Datetime-2.2.0.js" />
+    <Content Include="Scripts\MVCControlToolkit.Controls.Datetime-2.2.0.min.js" />
+    <Content Include="Scripts\MVCControlToolkit.JsQueryable-2.2.0.js" />
+    <Content Include="Scripts\MVCControlToolkit.JsQueryable-2.2.0.min.js" />
+    <Content Include="Scripts\upshot.js" />
+    <Content Include="Scripts\WebApiRetrieve.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\About.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\ToDoFilterByName.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\Themes\Test\DataGrid.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\IndexEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\MeetingsModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MeetingsModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\JsAction.BASE\JsAction.BASE.csproj">
+      <Project>{C4E1AB78-1727-4058-9A98-734E1A43D3A4}</Project>
+      <Name>JsAction.BASE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\JsAction.mvcct\JsAction.mvcct.csproj">
+      <Project>{EDFF0CA0-0484-4562-9DE9-C8F309A948FA}</Project>
+      <Name>JsAction.mvcct</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1714</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

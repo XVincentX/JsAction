@@ -1,0 +1,235 @@
+﻿@model Mvc_Examples.Models.ToDoViewModel
+@using MVCControlsToolkit.Core;
+@using MVCControlsToolkit.Controls;
+@using MVCControlsToolkit.Controls.Bindings;
+@using MVCControlsToolkit.DataAnnotations;
+@using MVCControlsToolkit.Linq;
+@using Mvc_Examples.Controls;
+@using Mvc_Examples.Models;
+@using System.Linq.Expressions;
+
+@{
+    ViewBag.Title = "Edit Grid";
+}
+<script type='text/javascript' src="@Url.Content("~/Scripts/EditDisplayToDo.js")"></script>
+<h2>My ToDo List (Display/Edit)</h2>
+
+@{Html.EnableClientValidation();}
+ 
+
+    
+    
+        
+    <div  id="root">
+        
+        @using (Html.BeginForm("Index", "Home", new {}, FormMethod.Post, new { id = "mainForm" }))
+        {
+            @* This form is used only for validation of the whole page of items, It will never be submitted
+               Since it is the first form of the page it host also the page Client ViewModel, that we don't need to submit*@
+            @Html.ValidationSummary(false, "There are some errors")
+            <div id="toDoContainer">
+                <table >
+                        <thead>
+                        <tr>
+                            <td class="ToDoHeader"><strong>@Html.SortButtonForCollection(m => m.DataPage.ToDoList, m => m.Name, sortButtonStyle: SortButtonStyle.Button) </strong></td>
+                            <td class="ToDoHeader"><strong>@Html.SortButtonForCollection(m => m.DataPage.ToDoList, m => m.DueDate, sortButtonStyle: SortButtonStyle.Button)</strong></td>
+                            <td class="ToDoHeader"><strong>@Html.ColumnNameForCollection(m => m.DataPage.ToDoList, m => m.Description)</strong></td>
+                            <td class="ToDoHeader"><strong>Edit</strong></td>
+                            <td class="ToDoHeader"><strong>Delete</strong></td>
+                            <td class="ToDoHeader"><strong>Undo</strong></td>
+                        </tr>
+                    </thead>
+           
+                @Html.ClientBlockRepeater(m => m.DataPage.ToDoList,
+                        _S.H<ToDoView>(
+                    @<tr data-bind="css: { rowSelected: $data==detailToDo.DetailOf()}">         
+                        <td class="ToDo">
+                            @item._D(m => m.Name)
+                            @item.ValidationMessageFor(m => m.Name, "*")
+                        </td>
+                        <td class="editor-field">
+                            @item._D(m => m.DueDate)
+                            @item.ValidationMessageFor(m => m.DueDate, "*")
+                        </td>
+                        <td class="ToDo">
+                            @item._D(m => m.Description)
+                            @item.ValidationMessageFor(m => m.Description, "*")
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" data-bind='click: function(item){detailToDo.edit(item);}'/>
+                            @item.ValidationMessageFor(m => m.Tasks, "*")
+                        </td>
+                        <td>
+                            <input type="button" value="Delete" data-bind='click: function(item){detailToDo.remove(item);}'/>
+                        </td>
+                        <td>
+                            <input type="button" value="Undo" data-bind='click: function(item){detailToDo.undo(item);}, enable: _inserted() || _modified() || tasksChanged()'/>
+                        </td>
+                    </tr>
+                    ),
+                    ExternalContainerType.tbody,
+                                new { id = "ToDoContainer" },
+                                applyClientValidation: false,
+                                templateEngine: "nativeTemplateEngine") 
+                </table>   
+            </div> 
+        }
+        @using (Ajax.BeginForm("Index", "Home", new AjaxOptions { UpdateTargetId = null, OnSuccess = "OnSuccess" }, new { id = "mainForm" }))
+        {
+            @* This form submits query information contained in the pager, sorting control and filter controls
+               The server answer with jSon data that are handled in the OnSuccess funtion
+            *@
+            
+            <text>
+            
+
+            @*Basic DataFilterClauseFor Start*@
+       <div >
+            @{var hName = Html.DataFilterClauseFor(
+                  m => m.ToDoFilter, f => f.Name,
+                  "byNameFilter",
+                  MVCControlsToolkit.Linq.FilterCondition.StartsWith);}
+            @hName.CheckBoxFor(m => m.Selected, new { @class = "byNameFilter_checkbox" })
+             &nbsp; Filter by name 
+            <span  class="byNameFilter">
+                @hName.FilterClauseSelect(
+                    hName.ViewData.Model.Condition,
+                    (Expression<Func<ToDoView, string>>)(m => m.Name),
+                    conditions: CanSortAttribute.AllowedForProperty(typeof(ToDoView), "Name"))
+                @hName.TypedTextBoxFor(m => m.Search, watermarkCss: "watermark")
+            </span>  
+            @hName.ViewsOnOff("byNameFilter", false)
+        </div>
+        <div>
+            @{var hFromDate = Html.DataFilterClauseFor(m => m.ToDoFilter, f => f.DueDate, "fromDateFilter");}
+            @hFromDate.CheckBoxFor(m => m.Selected, new { @class = "fromDateFilter_checkbox" })
+             &nbsp; From: 
+            <span class="fromDateFilter">
+                @{hFromDate.ViewData.Model.Condition = MVCControlsToolkit.Linq.FilterCondition.GreaterThanOrEqual;}
+                @hFromDate.HiddenFor(m => m.Condition)
+                @hFromDate.DateTimeFor(m => m.Search, DateTime.Today.AddMonths(-6), true).DateCalendar(inLine: false, calendarOptions: new CalendarOptions
+                       {
+                           ChangeYear = true,
+                           ChangeMonth = true,
+                       })
+               
+            </span> 
+            @hFromDate.ViewsOnOff("fromDateFilter", false)
+        </div>
+        <div>
+            @{var hToDate = Html.DataFilterClauseFor(m => m.ToDoFilter, f => f.DueDate, "toDateFilter");}
+            @hToDate.CheckBoxFor(m => m.Selected, new { @class = "toDateFilter_checkbox" })
+             &nbsp; To: 
+            <span class="toDateFilter">
+                @{hToDate.ViewData.Model.Condition = MVCControlsToolkit.Linq.FilterCondition.LessThanOrEqual;}
+                @hToDate.HiddenFor(m => m.Condition)
+                @hToDate.DateTimeFor(m => m.Search, DateTime.Today.AddMonths(6), true).DateCalendar(inLine: false, calendarOptions: new CalendarOptions
+                       {
+                           ChangeYear = true,
+                           ChangeMonth = true,
+                       })
+            </span>
+             @hToDate.ViewsOnOff("toDateFilter", false) 
+        </div>
+        @*Basic DataFilterClauseFor End*@ 
+
+            @* Pager + Refresh button *@
+            <div class="ToDoPager">
+                @{ var pager = Html.ClientPagerFor(m => m.DataPage.CurrPage, m => m.DataPage.TotalPages, "(", ")");}
+                @pager.PageButton("<<", PageButtonType.First, PageButtonStyle.Link) 
+                @pager.PageButton("<", PageButtonType.Previous, PageButtonStyle.Link) 
+                @pager.PageChoice(4) 
+                @pager.PageButton(">", PageButtonType.Next, PageButtonStyle.Link) 
+                @pager.PageButton(">>", PageButtonType.Last, PageButtonStyle.Link) 
+                @pager.PageButton("Go To", PageButtonType.GoTo, PageButtonStyle.Button)
+                @pager.GoToText(new { style = "width:50px;" }) 
+                <input id="Button1" type="button" data-bind='click: function(x){x.Refresh();}' value="Refresh" />
+            </div>   
+             @* Pager + Refresh button End *@         
+            <input id="btnSaveAll" type="button" value="Submit All Changes" data-bind="click: save" />
+            <input id="btnUndoAll" type="button" value="Undo All Changes" data-bind="click: undoAll" />
+        
+            @Html.EnableSortingNoTrackFor(m => m.DataPage.ToDoList, m => m.ToDoOrder, "NormalHeaderToDo", "AscendingHeaderToDo", "DescendingHeaderToDo", page: m => m.DataPage.CurrPage, causePostback: false, oneColumnSorting: true) 
+        
+            </text>
+        }
+
+    </div>
+            
+        
+        
+        
+   @using (Html.BeginForm("IndexEdit", "Home", FormMethod.Post, new { id = "detailForm" }))
+   {@*this form is just as a validation container. Will never be submitted*@
+      <div id = "detailWindow">
+      @Html.ValidationSummary(false, "There are some errors")
+      @Html.Template(new ToDoViewDetail(),
+                _S.H<ToDoViewDetail>(
+          @<text>
+            <div class="fatherProperties">
+                  <div>
+                    @item.LabelFor(m => m.Name)
+                    @item.TextBoxFor(m => m.Name)
+                    @item.ValidationMessageFor(m => m.Name, "*")
+                  </div>
+                  <div>
+                    @item.LabelFor(m => m.DueDate)
+                    @item.DateTimeFor(m => m.DueDate, DateTime.Today, true).DateCalendar(inLine: false,
+                        calendarOptions: new CalendarOptions
+                        {
+                            ChangeYear = true,
+                            ChangeMonth = true,
+                        })
+                
+                    @item.ValidationMessageFor(m => m.DueDate, "*")
+                  </div>
+                  <div>
+                    @item.LabelFor(m => m.Description)<br /><br />
+                    @item.TextAreaFor(m => m.Description)
+                    @item.ValidationMessageFor(m => m.Description, "*")
+                  </div>
+                  <div>
+                      <input id="btnSave" type="button" value="Done" data-bind="click: save, enable: DetailOf() != null" />
+                      <input id="btnNew" type="button" value="Create New" data-bind="click: saveAsNew, enable: DetailOf() == null" />
+                  </div>
+             </div>
+             <div class="childrenProperties" data-bind="visible: DetailOf">
+                <table >
+                        <thead>
+                            <tr>
+                                <td class="ToDoHeader"><strong>@item.ColumnNameForCollection(m => m.Tasks, m => m.Name)</strong></td>
+                                <td class="ToDoHeader"><strong>@item.ColumnNameForCollection(m => m.Tasks, m => m.WorkingDays)</strong></td>
+                                <td class="ToDoHeader"><strong>Delete</strong></td>
+                                <td class="ToDoHeader"><strong>Undo</strong></td>
+                            </tr>
+                        </thead>
+                       @{var h=item._foreach(m => m.Tasks, ExternalContainerType.tbody);}
+                       @h._begin()
+                       <tr>
+                            <td>@h.TextBoxFor(m => m.Name)</td>
+                            <td>@h.TypedTextBoxFor(m => m.WorkingDays, new { @class = "smallNumbers" })</td>
+                            <td><input id="btnDetailDelete" type="button" value="Delete" data-bind='click: function(item){detailToDo.removeTask(item);}'/></td>
+                            <td><input id="btnDetailUndo" type="button" value="Undo" data-bind='click: function(item){detailToDo.undoTask(item);}, enable: _inserted() || _modified()'/></td>
+                       </tr>
+                       @h._end()
+                </table>
+                <input id="btnNewTask" type="button" value="New Task" data-bind="click: createTask" />
+             </div>
+           </text>
+              ), true, "detailToDo", "detailWindow")
+      </div>
+   }
+    
+<script type="text/javascript">
+    var query = mvcct.oDataQueryable('@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "ToDo"})', mvcct.$$.and);
+    query.importSortingControl('@Html.PrefixedId(m => m.ToDoOrder)'); //import default sorting (necessary for paging
+
+    
+
+    ClientToDoView.updater = mvcct.updatesManager(
+        '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "ToDo"})',
+         ClientToDoView,
+         'DataPage.ToDoList',
+         'id', DestinationViewModel, "ToDoCS");
+    
+</script>

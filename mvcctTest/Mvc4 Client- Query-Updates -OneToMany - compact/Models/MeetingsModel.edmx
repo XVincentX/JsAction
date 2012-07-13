@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SiteDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="SiteDbModelStoreContainer">
+          <EntitySet Name="SubTasks" EntityType="SiteDbModel.Store.SubTasks" store:Type="Tables" />
+          <EntitySet Name="ToDo" EntityType="SiteDbModel.Store.ToDo" store:Type="Tables" />
+          <AssociationSet Name="ToDoTasks" Association="SiteDbModel.Store.ToDoTasks">
+            <End Role="ToDo" EntitySet="ToDo" />
+            <End Role="SubTasks" EntitySet="SubTasks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SubTasks">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Name="code" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="WorkingDays" Type="int" Nullable="false" />
+          <Property Name="[Order]" Type="int" />
+          <Property Name="idTask" Type="int" />
+        </EntityType>
+        <EntityType Name="ToDo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="ToDoTasks">
+          <End Role="ToDo" Type="SiteDbModel.Store.ToDo" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubTasks" Type="SiteDbModel.Store.SubTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ToDo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubTasks">
+              <PropertyRef Name="idTask" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SiteDbModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SiteDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ToDo" EntityType="SiteDbModel.ToDo" />
+          <EntitySet Name="SubTasks" EntityType="SiteDbModel.SubTasks" />
+          <AssociationSet Name="ToDoTasks" Association="SiteDbModel.ToDoTasks">
+            <End Role="ToDo" EntitySet="ToDo" />
+            <End Role="SubTasks" EntitySet="SubTasks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ToDo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="SubTasks" Relationship="SiteDbModel.ToDoTasks" FromRole="ToDo" ToRole="SubTasks" />
+        </EntityType>
+        <EntityType Name="SubTasks">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Type="Int32" Name="code" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="WorkingDays" Nullable="false" />
+          <Property Type="Int32" Name="C_Order_" />
+          <Property Type="Int32" Name="idTask" />
+          <NavigationProperty Name="ToDo" Relationship="SiteDbModel.ToDoTasks" FromRole="SubTasks" ToRole="ToDo" />
+        </EntityType>
+        <Association Name="ToDoTasks">
+          <End Type="SiteDbModel.ToDo" Role="ToDo" Multiplicity="0..1" />
+          <End Type="SiteDbModel.SubTasks" Role="SubTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ToDo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubTasks">
+              <PropertyRef Name="idTask" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SiteDbModelStoreContainer" CdmEntityContainer="SiteDbEntities">
+          <EntitySetMapping Name="ToDo"><EntityTypeMapping TypeName="SiteDbModel.ToDo"><MappingFragment StoreEntitySet="ToDo">
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SubTasks">
+            <EntityTypeMapping TypeName="SiteDbModel.SubTasks">
+              <MappingFragment StoreEntitySet="SubTasks">
+                <ScalarProperty Name="idTask" ColumnName="idTask" />
+                <ScalarProperty Name="C_Order_" ColumnName="[Order]" />
+                <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MeetingsModel">
+        <EntityTypeShape EntityType="SiteDbModel.ToDo" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="SiteDbModel.SubTasks" Width="1.5" PointX="4" PointY="2.875" Height="2.1725878906249996" />
+        <AssociationConnector Association="SiteDbModel.ToDoTasks" >
+          <ConnectorPoint PointX="2.25" PointY="1.740143229166667" />
+          <ConnectorPoint PointX="4.75" PointY="1.740143229166667" />
+          <ConnectorPoint PointX="4.75" PointY="2.875" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

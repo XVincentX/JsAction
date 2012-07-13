@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JsAction.mvcct</name>
+    </assembly>
+    <members>
+        <member name="T:JsAction.mvcct.JsQueryableHelperExt">
+            <summary>
+            Static helper class ext
+            </summary>
+        </member>
+        <member name="M:JsAction.mvcct.JsQueryableHelperExt.JsActionQueryableScript(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Injects script reference to JsQueryables
+            </summary>
+            <param name="helper">HtmlHelper</param>
+            <returns>href script</returns>
+        </member>
+        <member name="T:JsAction.mvcct.JsActionQueryableHandler">
+            <summary>
+            JsAction queryable handler
+            </summary>
+        </member>
+        <member name="M:JsAction.mvcct.JsActionQueryableHandler.GenerateMethodCall(System.Text.StringBuilder,System.Reflection.MethodInfo,System.String,System.Boolean)">
+            <summary>
+            Methodcall generation
+            </summary>
+            <param name="js">StringBuilder</param>
+            <param name="method">Method</param>
+            <param name="Controller">Controller</param>
+            <param name="documentate">Documentate funziont</param>
+        </member>
+        <member name="M:JsAction.mvcct.JsActionQueryableHandler.GetMethodsWith(System.Reflection.Assembly[])">
+            <summary>
+            Get methods on which attribute are set
+            </summary>
+            <param name="asm">External assembly</param>
+            <returns>Methods</returns>
+        </member>
+        <member name="M:JsAction.mvcct.JsActionQueryableHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Processes current request
+            </summary>
+            <param name="context">HttpContext to handle with</param>
+        </member>
+        <member name="P:JsAction.mvcct.JsActionQueryableHandler.cacheKey">
+            <summary>
+            CacheKey
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsActionQueryableHandler.InnerObject">
+            <summary>
+            InnerObject
+            </summary>
+        </member>
+        <member name="T:JsAction.mvcct.JsqSelectMethodAttribute">
+            <summary>
+            JsActionQueryable attribute can be used to mark Action Method and generate related Javascript.
+            </summary>
+        </member>
+        <member name="T:JsAction.mvcct.JsActionQueryableRouteInstance">
+            <summary>
+            Default Routehandler instance for Queryable extension
+            </summary>
+        </member>
+        <member name="F:JsAction.mvcct.JsActionQueryableRouteInstance.JsActionQueryableRoute">
+            <summary>
+            JsAction Queryable route
+            </summary>
+        </member>
+        <member name="T:JsAction.mvcct.JsqChangesetAttribute">
+            <summary>
+            Attribute to specify a changeset in MVCCT JsQueryable
+            </summary>
+        </member>
+        <member name="M:JsAction.mvcct.JsqChangesetAttribute.#ctor">
+            <summary>
+            Object .ctor
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.InsertedEntities">
+            <summary>
+            Inserted Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.ModifiedEntities">
+            <summary>
+             Modified Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.DeletedEntities">
+            <summary>
+            Deleted Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.FatherReferencesEntities">
+            <summary>
+            Father Reference Entities name
+            </summary>
+        </member>
+        <member name="T:JsAction.mvcct.JsqUpdateMethodAttribute">
+            <summary>
+            Design a method to be an Update Entity method
+            </summary>
+        </member>
+    </members>
+</doc>
