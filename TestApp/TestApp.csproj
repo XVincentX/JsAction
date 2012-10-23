@@ -113,6 +113,11 @@
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JsActions.vsdoc.js" />
     <Content Include="Scripts\qunit.js" />
     <Content Include="Scripts\script.js" />
@@ -136,10 +141,6 @@
     <ProjectReference Include="..\JsAction.BASE\JsAction.BASE.csproj">
       <Project>{C4E1AB78-1727-4058-9A98-734E1A43D3A4}</Project>
       <Name>JsAction.BASE</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\JsAction.mvcct\JsAction.mvcct.csproj">
-      <Project>{EDFF0CA0-0484-4562-9DE9-C8F309A948FA}</Project>
-      <Name>JsAction.mvcct</Name>
     </ProjectReference>
     <ProjectReference Include="..\JsAction.MVC\JsAction.MVC.csproj">
       <Project>{17F54E7C-2788-45C7-A2D4-82F9D819D4AB}</Project>

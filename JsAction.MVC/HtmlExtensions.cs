@@ -9,6 +9,11 @@ namespace System.Web.Mvc
 {
     public static class HtmlExtensions
     {
+        /// <summary>
+        /// Writes a script block in the current view using IDisposable pattern
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <returns>JSAScriptBlock to dispose in order to close script block</returns>
         public static JSAScriptBlock JsScriptBlock(this HtmlHelper helper)
         {
             TagBuilder tagbuilder = new TagBuilder("script");
@@ -16,16 +21,23 @@ namespace System.Web.Mvc
             tagbuilder.MergeAttribute("data-jsaction", "jsaction");
 
             helper.ViewContext.Writer.Write(tagbuilder.ToString(TagRenderMode.StartTag));
+            helper.ViewContext.Writer.Write(@"if (typeof JsActions=='undefined'){var JsActions={};JsActions.WebApi={};}");
             return new JSAScriptBlock(helper.ViewContext);
         }
 
 
-        public static void JsScriptForMethod<TController>(this HtmlHelper helper, Expression<Func<TController, object>> expression) where TController : Controller
-        {
-            JsScriptForMethod<TController>(helper, new Expression<Func<TController, object>>[] { expression });
-        }
+        /// <summary>
+        /// Creates a JSAction Ajax call for specified controller method.
+        /// </summary>
+        /// <typeparam name="TController">Controller with methods to create.</typeparam>
+        /// <param name="helper">Current html helper</param>
+        /// <param name="expressions">Lambda expression for controller creation.</param>
         public static void JsScriptForMethod<TController>(this HtmlHelper helper, params Expression<Func<TController, object>>[] expressions) where TController : Controller
         {
+            
+            StringBuilder sb = new StringBuilder(150);
+            string ControllerName = typeof(TController).Name.Substring(0, typeof(TController).Name.IndexOf("Controller"));
+            sb.AppendFormat(@"if (typeof JsActions.{0}=='undefined'){{JsActions.{0}={{}}}}", ControllerName);
 
             foreach (var expression in expressions)
             {
@@ -34,17 +46,14 @@ namespace System.Web.Mvc
 
                 var method = (expression.Body as MethodCallExpression).Method;
 
-                helper.ViewContext.Writer.Write("function gerbone(){}");
+                sb.AppendFormat("if(JsActions.{0}.{1}=='undefined'){{JsActions.{0}.{1}=function(){{}}}}", ControllerName, method.Name);
+
+                helper.ViewContext.Writer.Write(sb.ToString());
 
             }
         }
         public static void JsScriptForController<TController>(this HtmlHelper helper) where TController : Controller
         {
-            JsScriptForController<TController>(helper, null);
-        }
-        public static void JsScriptForController<TController>(this HtmlHelper helper, params Expression<Func<TController, object>>[] Exceptions) where TController : Controller
-        {
-
         }
     }
 

@@ -181,7 +181,7 @@ namespace JsAction
         protected void ComplexTypeDecomposition(StringBuilder js, Lazy<List<Type>> ComplexTypeList, bool documentate)
         {
 
-            return; //temporaney
+            return; //for now.
 
             if (!ComplexTypeList.IsValueCreated)
                 return;
