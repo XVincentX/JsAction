@@ -14,7 +14,7 @@ namespace JsAction
     /// <summary>
     /// Http and Route handler for javascript file generation
     /// </summary>
-    public class JsActionHandler : IJsActionHandler
+    public class JsActionMVCHandler : JsActionHandler
     {
 
         protected override void GenerateMethodCall(StringBuilder js, MethodInfo method, string Controller, bool documentate)
@@ -37,7 +37,7 @@ namespace JsAction
             {
                 if (m.ParameterType.IsGenericType)
                     ComplexTypeList.Value.Add(m.ParameterType.GetGenericArguments().First());
-                else if (m.ParameterType != typeof(string) && m.ParameterType.IsPrimitive == false)
+                else if (this.FindIEnumerable(m.ParameterType) == null && m.ParameterType != typeof(DateTime) && m.ParameterType != typeof(DateTimeOffset) && m.ParameterType.IsPrimitive == false)
                     ComplexTypeList.Value.Add(m.ParameterType);
                 return false;
             });
@@ -55,7 +55,7 @@ namespace JsAction
             if (documentate)
             {
                 //Method can be empty.
-                JsActionUtils.DocumentateTheFunction(js, method);
+                this.DocumentateTheFunction(js, method);
                 js.Append("},");
                 return;
 
@@ -133,13 +133,14 @@ namespace JsAction
             js.AppendFormat("var opts={{success:trd,url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:$.toDictionary({{{2}}})}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
             js.Append("jQuery.extend(opts,options);return jQuery.ajax(opts);},");
         }
-        protected override IEnumerable<IGrouping<Type, MethodInfo>> GetMethodsWith<TAttribute>(params Assembly[] asm)
+        protected override IEnumerable<IGrouping<Type, MethodInfo>> GetMethodsWith(params Assembly[] asm)
         {
+
             var methods =
                    from ass in asm
                    from t in ass.GetTypes()
                    from m in t.GetMethods()
-                   where m.IsDefined(typeof(TAttribute), false)
+                   where m.IsDefined(typeof(JsActionAttribute), false)
                    && m.IsDefined(typeof(NonActionAttribute), false) == false
                    select m;
 
@@ -159,13 +160,6 @@ namespace JsAction
         protected override string InnerObject
         {
             get { return string.Empty; }
-        }
-        protected override bool InjectHelperScript
-        {
-            get
-            {
-                return true;
-            }
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+@using (Html.JsScriptBlock())
+{
+    Html.JsScriptForMethod<TestApp.Controllers.HomeController>(w => w.JsonObject(), w => w.AsyncMethod());
+}
 <h2>
     JsAction tests</h2>
 <h1 id="qunit-header">

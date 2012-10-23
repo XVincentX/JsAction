@@ -7,7 +7,7 @@ namespace JsAction
     /// </summary>
     /// <remarks>All named parameters will be ignored when used in an ApiController</remarks>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class JsActionAttribute : Attribute
+    public sealed class JsActionAttribute : Attribute
     {
         /// <summary>
         /// Object .ctor

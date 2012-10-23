@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace JsAction
 {
-    class JsActionWebApiHandler : IJsActionHandler
+    class JsActionWebApiHandler : JsActionHandler
     {
 
         protected override void GenerateMethodCall(StringBuilder js, System.Reflection.MethodInfo method, string Controller, bool documentate)
@@ -34,7 +34,7 @@ namespace JsAction
             {
                 if (m.ParameterType.IsGenericType)
                     ComplexTypeList.Value.Add(m.ParameterType.GetGenericArguments().First());
-                else if (m.ParameterType != typeof(string) && m.ParameterType != typeof(DateTime) && m.ParameterType != typeof(DateTimeOffset) && m.ParameterType.IsPrimitive == false)
+                else if (this.FindIEnumerable(m.ParameterType) == null && m.ParameterType != typeof(DateTime) && m.ParameterType != typeof(DateTimeOffset) && m.ParameterType.IsPrimitive == false)
                     ComplexTypeList.Value.Add(m.ParameterType);
                 return false;
             });
@@ -43,7 +43,7 @@ namespace JsAction
             if (documentate)
             {
                 //Method can be empty.
-                JsActionUtils.DocumentateTheFunction(js, method);
+                this.DocumentateTheFunction(js, method);
                 js.Append("},");
                 return;
 
@@ -76,18 +76,18 @@ namespace JsAction
             js.Append("jQuery.extend(opts,options);return jQuery.ajax(opts);},");
         }
 
-        protected override IEnumerable<IGrouping<Type, System.Reflection.MethodInfo>> GetMethodsWith<TAttribute>(params System.Reflection.Assembly[] asm)
+        protected override IEnumerable<IGrouping<Type, System.Reflection.MethodInfo>> GetMethodsWith(params System.Reflection.Assembly[] asm)
         {
 
             var methods =
            from ass in asm
            from t in ass.GetTypes()
            from m in t.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-           where t.IsDefined(typeof(TAttribute), false)
+           where t.IsDefined(typeof(JsActionAttribute), false)
            && m.IsDefined(typeof(NonActionAttribute), false) == false
-
            && t.IsSubclassOf(typeof(ApiController))
            select m;
+
 
             return methods.GroupBy(m => m.DeclaringType);
         }
@@ -107,14 +107,5 @@ namespace JsAction
         {
             get { return ".WebApi"; }
         }
-
-        protected override bool InjectHelperScript
-        {
-            get
-            {
-                return true;
-            }
-        }
-
     }
 }

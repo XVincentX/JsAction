@@ -22,9 +22,9 @@ namespace TestApp.Controllers
             };
 
         }
-        public IEnumerable<Student> GetStudentList()
+        public IQueryable<Student> GetStudentList()
         {
-            return data;
+            return data.AsQueryable();
         }
 
         public Student GetById(int id)
@@ -49,9 +49,9 @@ namespace TestApp.Controllers
             return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage DeleteStudent(int id)
+        public HttpResponseMessage DeleteStudent(Student st)
         {
-            var elem = data.Where(q => q.id == id);
+            var elem = data.Where(q => q.id == st.id);
             if (elem.Count() > 0)
             {
                 data.Remove(elem.First());

@@ -41,9 +41,8 @@
     <Compile Include="ext\DocsByReflection.cs" />
     <Compile Include="ext\JsBeautify.cs" />
     <Compile Include="HttpSingleVerb.cs" />
-    <Compile Include="IJsActionHandler.cs" />
+    <Compile Include="JsActionHandler.cs" />
     <Compile Include="JsActionAttribute.cs" />
-    <Compile Include="JsActionUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

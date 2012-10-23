@@ -29,7 +29,7 @@
             <param name="Groups">Groups name to import</param>
             <returns>Html String that represents script reference</returns>
         </member>
-        <member name="T:JsAction.JsActionHandler">
+        <member name="T:JsAction.JsActionMVCHandler">
             <summary>
             Http and Route handler for javascript file generation
             </summary>

@@ -33,14 +33,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JsActionQueryable.cs" />
+    <Compile Include="JsActionQueryableChangesetOpts.cs" />
     <Compile Include="JsActionQueryableHandler.cs" />
     <Compile Include="JsActionQueryableRouteInstance.cs" />
+    <Compile Include="JsQueryableHelperExt.cs" />
+    <Compile Include="JsqUpdateMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
