@@ -4,17 +4,40 @@
         <name>JsAction.mvcct</name>
     </assembly>
     <members>
-        <member name="T:JsAction.mvcct.JsQueryableHelperExt">
+        <member name="T:JsAction.mvcct.JsqSelectMethodAttribute">
             <summary>
-            Static helper class ext
+            JsActionQueryable attribute can be used to mark Action Method and generate related Javascript.
             </summary>
         </member>
-        <member name="M:JsAction.mvcct.JsQueryableHelperExt.JsActionQueryableScript(System.Web.Mvc.HtmlHelper)">
+        <member name="T:JsAction.mvcct.JsqChangesetAttribute">
             <summary>
-            Injects script reference to JsQueryables
+            Attribute to specify a changeset in MVCCT JsQueryable
             </summary>
-            <param name="helper">HtmlHelper</param>
-            <returns>href script</returns>
+        </member>
+        <member name="M:JsAction.mvcct.JsqChangesetAttribute.#ctor">
+            <summary>
+            Object .ctor
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.InsertedEntities">
+            <summary>
+            Inserted Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.ModifiedEntities">
+            <summary>
+             Modified Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.DeletedEntities">
+            <summary>
+            Deleted Entities name
+            </summary>
+        </member>
+        <member name="P:JsAction.mvcct.JsqChangesetAttribute.FatherReferencesEntities">
+            <summary>
+            Father Reference Entities name
+            </summary>
         </member>
         <member name="T:JsAction.mvcct.JsActionQueryableHandler">
             <summary>
@@ -53,11 +76,6 @@
             InnerObject
             </summary>
         </member>
-        <member name="T:JsAction.mvcct.JsqSelectMethodAttribute">
-            <summary>
-            JsActionQueryable attribute can be used to mark Action Method and generate related Javascript.
-            </summary>
-        </member>
         <member name="T:JsAction.mvcct.JsActionQueryableRouteInstance">
             <summary>
             Default Routehandler instance for Queryable extension
@@ -68,35 +86,17 @@
             JsAction Queryable route
             </summary>
         </member>
-        <member name="T:JsAction.mvcct.JsqChangesetAttribute">
+        <member name="T:JsAction.mvcct.JsQueryableHelperExt">
             <summary>
-            Attribute to specify a changeset in MVCCT JsQueryable
+            Static helper class ext
             </summary>
         </member>
-        <member name="M:JsAction.mvcct.JsqChangesetAttribute.#ctor">
+        <member name="M:JsAction.mvcct.JsQueryableHelperExt.JsActionQueryableScript(System.Web.Mvc.HtmlHelper)">
             <summary>
-            Object .ctor
+            Injects script reference to JsQueryables
             </summary>
-        </member>
-        <member name="P:JsAction.mvcct.JsqChangesetAttribute.InsertedEntities">
-            <summary>
-            Inserted Entities name
-            </summary>
-        </member>
-        <member name="P:JsAction.mvcct.JsqChangesetAttribute.ModifiedEntities">
-            <summary>
-             Modified Entities name
-            </summary>
-        </member>
-        <member name="P:JsAction.mvcct.JsqChangesetAttribute.DeletedEntities">
-            <summary>
-            Deleted Entities name
-            </summary>
-        </member>
-        <member name="P:JsAction.mvcct.JsqChangesetAttribute.FatherReferencesEntities">
-            <summary>
-            Father Reference Entities name
-            </summary>
+            <param name="helper">HtmlHelper</param>
+            <returns>href script</returns>
         </member>
         <member name="T:JsAction.mvcct.JsqUpdateMethodAttribute">
             <summary>

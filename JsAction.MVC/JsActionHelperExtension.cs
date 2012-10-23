@@ -40,10 +40,5 @@ namespace System.Web.Mvc
         {
             return MvcHtmlString.Create(string.Format("<script type=\"text/javascript\" src=\"{0}\"></script>", string.Format(VirtualPathUtility.ToAbsolute("~/JsAction?data={0}"), string.Join(",", Groups))));
         }
-
-        public static MvcHtmlString JsActionQueryableScript(this HtmlHelper helper)
-        {
-            return MvcHtmlString.Create(string.Format("<script type=\"text/javascript\" src=\"{0}\"></script>", VirtualPathUtility.ToAbsolute("~/JsActionQueryable?data=")));
-        }
     }
 }

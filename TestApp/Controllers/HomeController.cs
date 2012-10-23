@@ -86,5 +86,17 @@ namespace TestApp.Controllers
         {
             return Json(new { i = 3, dt = DateTime.Now, wz = new { i = 7, dt = DateTime.Now.AddYears(10) } }, JsonRequestBehavior.AllowGet);
         }
+
+        [JsAction(Async = false), HttpGet]
+        public JsonResult TestWithArray(int[] i)
+        {
+            return Json(i,JsonRequestBehavior.AllowGet);
+        }
+
+        public EmptyResult HtmlHelperMethod()
+        {
+            return new EmptyResult();
+        }
+
     }
 }

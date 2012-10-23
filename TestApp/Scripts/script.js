@@ -1,4 +1,4 @@
-﻿/// <reference path="jquery-1.7.1-vsdoc.js" />
+﻿/// <reference path="jquery-1.8.2-vsdoc.js" />
 /// <reference path="qunit.js" />
 
 function err(jqXHR, textStatus, errorThrown)
@@ -51,6 +51,8 @@ test('JsAction generic features', function () {
     JsActions.Home.ListOfComplex(obj, { error: err }).then(function (data) { ok(true, 'List of complex objects'); });
 
     JsActions.Home.DateTimeObj(new Date(), { error: err }).then(function (data) { ok(true, 'DateTime send and receive ' + data.dt + '. Works also in subobjects: ' + data.wz.dt); });
+
+    JsActions.Home.TestWithArray([1, 2, 3, 4], { error: err }).then(function (data) { ok(true, 'Ok with array'); });
 });
 
 test('JsAction WebApi support', function () {
@@ -61,6 +63,5 @@ test('JsAction WebApi support', function () {
     stop();
     JsActions.WebApi.Student.PostStudent({ id: 3, Name: "Francisco", Surname: "Franco", BirthDay: new Date(), Exams: 15 }, { statusCode: { 200: function () { ok(true, 'New element inserted'); start(); } } });
     stop();
-    JsActions.WebApi.Student.DeleteStudent(500, { statusCode: { 200: function () { ok(false, 'This is not good'); start(); }, 404: function () { ok(true, 'Element not found'); start(); } } });
-
+    JsActions.WebApi.Student.DeleteStudent(500, { statusCode: { 200: function () { ok(true, 'Deleted'); start(); }, 404: function () { ok(false, 'Element not found'); start(); } } });
 });

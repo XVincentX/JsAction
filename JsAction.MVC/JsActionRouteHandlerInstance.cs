@@ -15,7 +15,7 @@ namespace JsAction
         /// <summary>
         /// Static singleton Route to add
         /// </summary>
-        public static readonly Route JsActionRoute = new Route("JsAction", new RouteValueDictionary(new { action = "JsAction", controller = "Foo" }), new JsAction.JsActionHandler());
+        public static readonly Route JsActionRoute = new Route("JsAction", new RouteValueDictionary(new { action = "JsAction", controller = "Foo" }), new JsAction.JsActionMVCHandler());
 
 
     }
