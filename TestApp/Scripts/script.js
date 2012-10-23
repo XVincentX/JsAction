@@ -36,10 +36,10 @@ test('JsAction generic features', function () {
         });
     });
 
-    ok(typeof (JsActions.Home.smpl10) != "undefined", 'JsAction renaming: smpl10 method existance');
+    ok(typeof (JsActions.Home.smpl10) !== "undefined", 'JsAction renaming: smpl10 method existance');
     JsActions.Home.smpl10({ error: err }).then(function (data) { ok(true, 'Call to smpl10 forwarded to' + data); });
 
-    ok(typeof (JsActions.Home.smpl20) != "undefined", 'ActionName attribute renaming: smpl20 method existance');
+    ok(typeof (JsActions.Home.smpl20) !== "undefined", 'ActionName attribute renaming: smpl20 method existance');
     JsActions.Home.smpl20({ error: err }).then(function (data) { ok(true, 'Call to smpl20 forwarded to' + data); });
 
     stop();
@@ -57,9 +57,9 @@ test('JsAction generic features', function () {
 
 test('JsAction WebApi support', function () {
     stop();
-    JsActions.WebApi.Student.GetStudentList().then(function (data) { ok(typeof data != 'undefined', 'WebApi data retrieving'); start(); });
+    JsActions.WebApi.Student.GetStudentList().then(function (data) { ok(typeof data !== 'undefined', 'WebApi data retrieving'); start(); });
     stop();
-    JsActions.WebApi.Student.GetById(2).then(function (data) { ok(typeof data != 'undefined', 'WebApi data retrieving 2'); start(); });
+    JsActions.WebApi.Student.GetById(2).then(function (data) { ok(typeof data !== 'undefined', 'WebApi data retrieving 2'); start(); });
     stop();
     JsActions.WebApi.Student.PostStudent({ id: 3, Name: "Francisco", Surname: "Franco", BirthDay: new Date(), Exams: 15 }, { statusCode: { 200: function () { ok(true, 'New element inserted'); start(); } } });
     stop();

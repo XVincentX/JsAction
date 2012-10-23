@@ -22,7 +22,6 @@ namespace TestApp
         {
             routes.Add("JsActionRoute", JsAction.JsActionRouteHandlerInstance.JsActionRoute);
             routes.Add("JsActionWebApiRoute", JsAction.JsActionWebApiRouteHandlerInstance.JsActionWebApiRoute);
-            routes.Add("JsActionQueryableRoute", JsAction.mvcct.JsActionQueryableRouteInstance.JsActionQueryableRoute);
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapHttpRoute(name: "DefaultApi", routeTemplate: "api/{controller}/{id}", defaults: new { id = RouteParameter.Optional });
