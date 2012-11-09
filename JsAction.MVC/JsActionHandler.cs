@@ -17,7 +17,7 @@ namespace JsAction
     public class JsActionMVCHandler : JsActionHandler
     {
 
-        protected override void GenerateMethodCall(StringBuilder js, MethodInfo method, string Controller, bool documentate)
+        protected override void GenerateMethodCall( StringBuilder js, MethodInfo method, string Controller, bool documentate )
         {
 
             var attributes = method.GetCustomAttributes(true);
@@ -35,10 +35,13 @@ namespace JsAction
 
             pars.FirstOrDefault(m =>
             {
+                var type = m.ParameterType;
+
                 if (m.ParameterType.IsGenericType)
-                    ComplexTypeList.Value.Add(m.ParameterType.GetGenericArguments().First());
-                else if (this.FindIEnumerable(m.ParameterType) == null && m.ParameterType != typeof(DateTime) && m.ParameterType != typeof(DateTimeOffset) && m.ParameterType.IsPrimitive == false)
-                    ComplexTypeList.Value.Add(m.ParameterType);
+                    type = m.ParameterType.GetGenericArguments().First();
+
+                if (this.FindIEnumerable(type) == null && type != typeof(DateTime) && type != typeof(DateTimeOffset) && type != typeof(string) && type.IsPrimitive == false)
+                    ComplexTypeList.Value.Add(type);
                 return false;
             });
 
@@ -65,7 +68,11 @@ namespace JsAction
             const string POST = "POST";
 
             string Action = (ActionAttr.Count() != 0) ? (ActionAttr.First() as ActionNameAttribute).Name : method.Name;
-            string url = RouteTable.Routes.GetVirtualPath(this.requestContext, new RouteValueDictionary(new { controller = Controller, action = Action })).VirtualPath;
+            string url = RouteTable.Routes.GetVirtualPath(this.requestContext, new RouteValueDictionary(new
+            {
+                controller = Controller,
+                action = Action
+            })).VirtualPath;
 
             bool post = false;
             bool get = false;
@@ -133,7 +140,7 @@ namespace JsAction
             js.AppendFormat("var opts={{success:trd,url:\"{0}\",async:{4},cache:{3},type:\"{1}\",data:$.toDictionary({{{2}}})}};", url, requestmethod, jsondata, jsattribute.CacheRequest == true ? "true" : "false", jsattribute.Async == true ? "true" : "false");
             js.Append("jQuery.extend(opts,options);return jQuery.ajax(opts);},");
         }
-        protected override IEnumerable<IGrouping<Type, MethodInfo>> GetMethodsWith(params Assembly[] asm)
+        protected override IEnumerable<IGrouping<Type, MethodInfo>> GetMethodsWith( params Assembly[] asm )
         {
 
             var methods =
@@ -159,7 +166,10 @@ namespace JsAction
         }
         protected override string InnerObject
         {
-            get { return string.Empty; }
+            get
+            {
+                return string.Empty;
+            }
         }
     }
 }

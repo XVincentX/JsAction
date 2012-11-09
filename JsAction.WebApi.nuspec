@@ -29,12 +29,12 @@ You will no longer have to write custom ajax calls to retrieve data, but just us
     <tags>jQuery MVC WEBAPI Routehandler</tags>
   </metadata>
   <files>
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.WEBAPI\App_Start\RegJsWebApi.cs.pp" target="content\App_Start\RegJsWebApi.cs.pp" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.WEBAPI\bin\Release\JsAction.BASE.dll" target="lib\net40\JsAction.BASE.dll" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.WEBAPI\bin\Release\JsAction.WEBAPI.dll" target="lib\net40\JsAction.WEBAPI.dll" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.WEBAPI\bin\Release\JsAction.WEBAPI.XML" target="lib\net40\JsAction.WEBAPI.XML" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\init.ps1" target="tools\init.ps1" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\JsAction-GenDoc.psd1" target="tools\JsAction-GenDoc.psd1" />
-    <file src="C:\Users\Vincenzo\Documents\Visual Studio 2010\Projects\JsAction\JsAction.BASE\PSScripts\JsAction-GenDoc.psm1" target="tools\JsAction-GenDoc.psm1" />
+    <file src="JsAction.WEBAPI\App_Start\RegJsWebApi.cs.pp" target="content\App_Start\RegJsWebApi.cs.pp" />
+    <file src="JsAction.WEBAPI\bin\Release\JsAction.BASE.dll" target="lib\net40\JsAction.BASE.dll" />
+    <file src="JsAction.WEBAPI\bin\Release\JsAction.WEBAPI.dll" target="lib\net40\JsAction.WEBAPI.dll" />
+    <file src="JsAction.WEBAPI\bin\Release\JsAction.WEBAPI.XML" target="lib\net40\JsAction.WEBAPI.XML" />
+    <file src="JsAction.BASE\PSScripts\init.ps1" target="tools\init.ps1" />
+    <file src="JsAction.BASE\PSScripts\JsAction-GenDoc.psd1" target="tools\JsAction-GenDoc.psd1" />
+    <file src="JsAction.BASE\PSScripts\JsAction-GenDoc.psm1" target="tools\JsAction-GenDoc.psm1" />
   </files>
 </package>
