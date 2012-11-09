@@ -181,8 +181,6 @@ namespace JsAction
         protected void ComplexTypeDecomposition(StringBuilder js, Lazy<List<Type>> ComplexTypeList, bool documentate)
         {
 
-            return; //for now.
-
             if (!ComplexTypeList.IsValueCreated)
                 return;
 
@@ -199,7 +197,7 @@ namespace JsAction
 
                 foreach (var prop in props)
                 {
-                    if (prop.PropertyType.IsClass && !prop.PropertyType.IsPrimitive)
+                    if (prop.PropertyType.IsClass && !prop.PropertyType.IsPrimitive && prop.PropertyType != typeof(string))
                     {
                         ComplexTypeList.Value.Add(prop.PropertyType.GetType());
                         w++;
@@ -268,7 +266,7 @@ namespace JsAction
 
         #region Protected Members
         protected RequestContext requestContext;
-        protected Lazy<StringBuilder> alerts = new Lazy<StringBuilder>(() => { return new StringBuilder(600); }, false);
+        protected Lazy<StringBuilder> alerts = new Lazy<StringBuilder>(() => { return new StringBuilder(200); }, false);
         protected Lazy<List<Assembly>> SearchAsm = new Lazy<List<Assembly>>(() => { return new List<Assembly>(3); }, false);
         protected Lazy<List<Type>> ComplexTypeList = new Lazy<List<Type>>(() => { return new List<Type>(4); }, false);
         protected string[] groups;
