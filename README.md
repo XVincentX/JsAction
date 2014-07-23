@@ -9,14 +9,14 @@ You will no longer have to write custom ajax calls to retrieve data, but just us
 
 1. Mark your method with **JsActionAttribute**
 
-[![Image1](http://i3.codeplex.com/Download?ProjectName=jsaction&DownloadId=34407)]
+![Image1](http://i3.codeplex.com/Download?ProjectName=jsaction&DownloadId=344075)
 
 2. Call it directly from JavaScript with FULL intellisense support!!
 
-[![Image1](http://i3.codeplex.com/Download?ProjectName=jsaction&DownloadId=344084)]
+![Image1](http://i3.codeplex.com/Download?ProjectName=jsaction&DownloadId=344084)
 
 qUnit tested:
 
-[![qunit](http://download.codeplex.com/Download?ProjectName=jsaction&DownloadId=345203)]
+[![qunit](http://download.codeplex.com/Download?ProjectName=jsaction&DownloadId=345203])
 
 Check the Wiki for more informations.
