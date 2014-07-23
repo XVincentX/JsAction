@@ -17,6 +17,6 @@ You will no longer have to write custom ajax calls to retrieve data, but just us
 
 qUnit tested:
 
-[![qunit](http://download.codeplex.com/Download?ProjectName=jsaction&DownloadId=345203])
+![qunit](http://download.codeplex.com/Download?ProjectName=jsaction&DownloadId=345203])
 
 Check the Wiki for more informations.
