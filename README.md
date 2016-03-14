@@ -1,6 +1,8 @@
 JsAction
 ========
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/b7w27y0326k9hky5/branch/master)](https://ci.appveyor.com/project/XVincentX/jsaction/branch/master)
 
 JsAction is a simple and lightweight RouteHandler for ASP.NET MVC that will generate automatic jQuery based Javascript and provide a direct way to call MVC Action Methods using a single data annotation.
